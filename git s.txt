@@ -1,0 +1,63 @@
+What is the git command that downloads any repository from GitHub to your computer?
+git clone
+
+How do you push a file from your local system to the GitHub repository using Git?
+First, connect the local repository to your remote repository:
+
+git remote add origin [copied web address]      
+
+// Ex: git remote add origin https://github.com/Simplilearn-github/test.git
+
+Second, push your file to the remote repository:
+
+git push origin master
+
+git init
+You create a working directory with git init
+A .git subfolder is created with all the git-related revision history
+
+
+ Which of the following CLI commands can be used to rename files?
+git rm
+
+git fetch
+Git fetch only downloads new data from a remote repository
+git pull
+Git pull updates the current HEAD branch with the latest changes from the remote server
+
+What is Git stash
+
+A developer working with a current branch wants to switch to another branch to work on something else, but the developer doesn't want to commit changes to your unfinished work. The solution to this issue is Git stash. Git stash takes your modified tracked files and saves them on a stack of unfinished changes that you can reapply at any time.
+
+Explain the concept of branching in Git.
+Suppose you are working on an application, and you want to add a new feature to the app. You can create a new branch and build the new feature on that branch.
+
+By default, you always work on the master branch
+The circles on the branch represent various commits made on the branch
+After you are done with all the changes, you can merge it with the master branch
+
+
+Git Merge and Git Rebase
+
+Join two or more development histories together
+git rebase
+ Reapply commits on top of another base tip
+
+ How do you find a list of files that have been changed in a particular commit?
+The command to get a list of files that have been changed in a particular commit is:
+
+git diff-tree –r {commit hash}
+
+Example: git diff-tree –r 87e673f21b
+
+-r flag instructs the command to list individual files
+commit hash will list all the files that were changed or added in that commit
+
+ What is a merge conflict in Git, and how can it be resolved?
+A Git merge conflict happens when you have merge branches with competing for commits, and Git needs your help to decide which changes to incorporate in the final merge.
+
+git hook
+
+What is a git hook and how might you use it?
+Git hooks are automated scripts triggered before or after specific Git commands, such as pre-commit, pre-push, post-commit, and post-receive, are executed. 
+They serve various functions, including syntax verification, testing, and the enforcement of project guidelines.
