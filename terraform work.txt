@@ -1,0 +1,324 @@
+Workflow
+we are 5to 6 people. we have a github respository that host the terraform code and tat code will have AWS resource logic
+lets say we are using the terraform project to create EKS,VPC instead of storing the statefile in the github respository itself we will use S3 bucket as remote backend
+
+if any person wants to update the EKS,VPC 3-tier artechitecture logic. they can simply clone the repository on there laptop. they can make the changes,they can verify the changes using terraform apply
+with this they will raise a pull request back in the github respository
+it will update in S3 logic
+once they raise pull request sommeone will approve
+then the new terraform will update with the source code. will the terraform file changes as will as the statefile is updated in the S3 bucket
+
+devloper team XYZ created app.py
+
+devops team will create terraform
+in terraform project
+they tell us to create VPC
+public subnet
+for that subnet we have to create route table destination for that route table is internet gateway
+then we need to assocaite to the public subnet
+we need to create EC2 instance 
+and deploy this particular instance on to app.py
+and expose this to the external world with security groups (8080)
+with the URL test the application
+
+provisioner->
+we not used infrasture we also used to execute + implement some actions during the creation
+at the time of creation of EC2 instance i have copied the file + i have execute the commands
+we can use provision at the time of creation and also in the time of destruction
+
+using terraform, we have created EC2 with all the required configuration with vpc,routetable etc but
+we are not able install python if we dont use provisioner. we have create all the required configuration using ansible,shellscript to connect to the instances
+
+remote exec provisioner-at the time of crating EC2 instance you can connect to that particular instance or resource-> we can execute any kind of commands(can be installing python,nodejs,java)
+ 
+local exec provisioner
+print anything on the console(particular Ec2 is created)
+if terraforms has 10,000 file in the console, in the local exec we can ask terraform to copy all the output to a particular file.
+
+day-6
+ 
+what is public IAAS platforms
+a cloud computing model that provides on-demand access to computing resources such as servers, storage, networking, and virtualization.
+
+types of application deloyments - bluegreen, canary
+
+Blue/green deployments provide releases with near zero-downtime and rollback
+capabilities. The fundamental idea behind blue/green deployment is to shift traffic
+between two identical environments that are running different versions of your
+application. The blue environment represents the current application version serving
+production traffic. In parallel, the green environment is staged running a different version
+of your application. After the green environment is ready and tested, production traffic is
+redirected from blue to green. If any problems are identified, you can roll back by
+reverting traffic back to the blue environment.
+
+Although blue/green deployment isn’t a new concept, you don’t commonly see it used in
+traditional, on-premises hosted environments due to the cost and effort required to
+provision additional resources. The advent of cloud computing dramatically changes
+how easy and cost-effective it is to adopt the blue/green approach for deploying
+software. 
+
+users-> amazon route S3 DNS endpoint -> AWS region (app v1)(blue environment live)-> database
+users-> amazon route S3 DNS endpoint -> AWS region (app v2)(green environment live)-> database
+
+scenorio1:-migration detection wt if there are 100 such instances wt if they are so many resources already created
+statefile is a key
+using terraform understands wt resources it has to create,modify or delete no if there is no statefile here
+because u just started with terraform,there is no statefile. how will terraform understands that there is already a resource.
+we use terraform import command.but how does it actually works?
+
+scenorio2: drift detection in terraform
+terraform refresh we need to run as a cron job every one hour
+if any changs is done in manual in resource
+lambda function will go to the audit logs identify this is an unwanted change immediately sent out notification to the team members
+
+branching strategy git 
+------------------
+primary goal is to ensure that the customer gets releases on time. customer gets new features on time.
+
+every 2 months they are deliverying a new kubernetes version to us.
+
+what is branch?
+branch is nothing but its a separation.
+
+we have building a simple calculator in git/ we want to introduce some breaking changes. calculator with Addition/subtraction/multiplication/division functionality. we want to add version2 in calcultor functionality. like some percentage,advance calculator capability.
+in such cases, instead of making directly changes into the existing branch that is master or main branches
+or v2 branch, feature-v2
+start development on this new branch test this code. once we are confident like testing is good. we simply merge this changes to the exixting functionality and delete it
+
+any new changes or adding new changes in your applicationis not effecting the existing functionality
+for example:- uner is a application supporting cabs they want to add uber bikes this is already given to the customer
+
+we create a release -> we build this release branch and we ship this release branch to customer
+why we do in release branch why not from master
+master is actively kept for active development
+who actively kept on master 
+from the release branch we ship the product to the customer
+
+master ->happens latest code changes or not 
+feature
+release
+they will ship the release to the custmoer
+build and ship this release branch to customer
+master is kept for active development. from the release branch we ship the product to the custmr
+
+hotfix/bugfix branch
+very short leaved projects whenever there is customer version is released_v3 and after 3 days some user reported there is a bug in a production.
+what we usualy do we create immediately a new branch called a hotfix branch.
+hotfix branch will try to address the changes that customer required it will be merge to all branches it will be merge to master and all the branches we are supporting.
+
+from which branch do you usually perform releases
+it will be a release branch
+git- it is a command to check whther who made changes in the file
+wt s a feature branch
+feature branch is nothing but whenever we want to introduce some breaking changes
+from existing functionality we create feature branch.
+
+always updated branch is master/main
+
+to create a git repository we use 
+git init->.git folder
+
+git log
+------
+it gives you list of commit
+
+what is git workflow that you use in organisation
+git add && git commit -m "" && git push
+
+
+git init 
+local to remote respository
+
+git clone URL
+repository gits downloaded the code using ssh or https option into local
+
+we need to config with remotes
+
+how to pull the code from github
+git clone
+
+git clone vs git fork
+---------------------
+forking git is a disturbted version control system.the git code is present in one place we can disturbut it that you can create multiple copyies or multiple replicas of
+we can collaberate on that replica
+3.4k that 13400 has created a copy of repository to that particular date 
+fork is used to create a copy of repository where as clone is used for download of respository
+
+		
+
+we can go git log division from the main branch and we can go to another branch in the same branch
+In git main
+git log division
+
+if you wants to do any changes from one branch to another branch
+git cherry-pick commitID
+git log main
+git log division we can see the same commit
+
+git is disturbuted vc system
+central-> client and server arhitecture nad server is a remote respository has all the copies of your code. and only available in the server.
+distributed->every dev has all copies of the code/all copies of the code like each every has cloned to remote respositoy
+
+what are the git commands that you use to commit changes to your remote respository
+git add
+git commit 
+git push
+
+what is the difference b/n git fetch and git pull
+git fetch-> lets assume that we are working on speciefic respository and cloned the respository to the local and after few days we realize that you want to see wt are the changes that are made to the remote respository by colege or any other devolopers
+so we want to the changes we can use git fetch it will show the info of wt are the changes that are made but it doesnot merge the changes to your local respository.
+
+git pull
+it does the same as it will also get the changes to your local repository
+
+diff git merge and git rebase
+git merge- if we want to bring the code changes from from one branch to another branch 
+we can either do git merge or git rebase 
+how they are projecting the history
+
+git rebase
+revision history we should always go to rebase the linear code history
+
+.git and .gitignore
+
+git reset soft
+ file a 
+  fileb, file c
+fileb->git reset soft fileb
+file a -> tracked file->git status
+fileb,filec-> git log --oneline
+
+git reset mixed
+
+  file a 
+  fileb, file c
+git reset mixed file a
+git log --online
+filea
+
+fileb filea->it wont log
+git status 
+untracked file,tracked file
+
+git reset hard filea 
+ file a 
+ fileb, file c
+
+git log
+filea commitID
+fileb
+filec 
+
+git revert
+
+touch sample.txt
+cat sample.txt
+line1
+line2
+line3
+
+git revert
+line1 line2 line3-> contents will be deleted 
+
+git log --oneline
+sample.txt commitId
+
+git rebase
+branch a branch b
+
+branch a 				branch b
+file3- 11.00am,file4- 3.00pm		file 1-10.00am , file2- 2.00pm
+
+git rebase
+git log --oneline
+
+file4
+file3
+file2
+file1
+
+brANCH A
+branch b
+
+git merge
+branch a 				branch b
+file3- 11.00am,file4- 3.00pm		file 1-10.00am , file2- 2.00pm
+
+git merge
+git log --oneline
+
+file1-10.00
+file3 11.00
+file2 2.00pm
+file4-3.00pm
+
+hooks 
+if you want to do something if you want to perform an action before or after is called hook
+pre-hook->action that are done before doing git commit
+post-hook ->action that are done after doing git commit
+
+webhook
+webhook -> git to preform an action
+
+git stash 
+temparory saves changes that you made near working copy lets assume you are working on a code change and immediately there is a serious big and 
+we want to move from this bug to another bug and we cannot commit this changes because they are not ready. we can stash this changes like temporarily saving them 
+in your git and move to a different bug and you make those code changes and once you are satisfy with them you can push and we can do git stash pop. we can get those changes back
+
+kubernetes
+masternode->control plane
+workernode->nodes
+
+what is cassandra
+Cassandra is defined as an open-source NoSQL data storage system that leverages a distributed architecture to enable high availability, scalability, and reliability, 
+managed by the Apache non-profit organization
+
+what is Neo4j
+Neo4j is the world's leading open source Graph Database which is developed using Java technology. It is highly scalable and schema free (NoSQL).
+Neo4j is a native graph database, which means that it implements a true graph model all the way down to the storage level.
+
+what is solr?
+Apache Solr (stands for Searching On Lucene w/ Replication) is a free, open-source search engine based on the Apache Lucene library. An Apache Lucene subproject, it has been available since 2004 and is one of the most popular search engines available today worldwide.
+
+what is Hazel?
+Hazelcast Platform is a unified real-time data platform that enables companies to act instantly on all data. It combines high-performance stream processing capabilities with a built-in fast data store to automate, streamline, and enhance business-critical processes and applications.
+
+what is Zuul?
+
+Zuul is a gateway service that provides dynamic routing, monitoring, resiliency, security, and more.
+
+Zuul is built to enable dynamic routing, monitoring, resiliency, and security. 
+It can also route the requests to multiple Amazon Auto Scaling Groups. 
+For Example, /api/products are mapped to the product service and /api/user is mapped to the user service.
+
+what is Eureka?
+Eureka Server finds applications in various scenarios, including: Microservices Architecture: Eureka is a fundamental building block for microservices-based applications. Distributed Systems: It simplifies the management of service discovery in complex, distributed systems
+
+Explain Netflix OSS Stack?
+
+prometheus architecture explained
+ELK architecture
+K8s architecture
+
+
+cronjob
+-------
+A CronJob creates Jobs on a repeating schedule.
+
+CronJob is meant for performing regular scheduled actions such as backups, report generation, and so on.
+
+post {
+
+  always {
+    echo "I'm always ran"
+  }
+
+  success {
+    echo "All builds completed OK"
+  }
+
+  failure {
+    echo "A job failed"
+
+  }
+}

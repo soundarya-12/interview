@@ -1,0 +1,62 @@
+Ansible is an open-source platform that facilitates configuration management, 
+It’s agentless and only requires SSH service running on the target machines
+Python is the only required dependency and, fortunately, most systems come with the language pre-installed
+
+Ansible is an ideal tool for CI/CD processes, providing a stable infrastructure for provisioning 
+the target environment and then deploying the application to it.
+
+
+Describe how Ansible works.
+
+two types of servers: 
+controlling machines and nodes. 
+Ansible is installed on the controlling computer, and the controlling machines manage the nodes via SSH. 
+
+The controlling machine contains an inventory file that holds the node system’s location. 
+Ansible runs the playbook on the controlling machine to deploy the modules on the node systems. 
+Since Ansible is agentless, there’s no need for a third-party tool to connect the nodes.
+
+The controlling machine contains an inventory file
+Ansible runs the playbook on the controlling machine to deploy the modules on the node systems. 
+
+Explain playbook
+A playbook has a series of YAML-based files that send commands to remote computers via scripts.
+
+ansible tower
+It’s an enterprise-level web-based solution that increases Ansible’s accessibility to other IT teams by including an easy-to-use UI
+
+What is “idempotency”?
+
+you can execute one or more tasks on a server as many times as you need to, but it won’t change anything that’s already been modified and is working correctly. To put it in basic terms, the only changes added are the ones needed and not already in place.
+
+How do you use Ansible to create encrypted files?
+To create an encrypted file, use the ‘ansible-vault create’ command.
+
+$ ansible-vault create filename.yaml
+
+
+What’s an ad hoc command?
+it a one-shot command. single line command
+
+What are tags?
+
+When there’s an extensive playbook involved, sometimes it’s more expedient to run just a part of it as opposed to the entire thing.
+
+What’s a handler?
+ a handler is similar to a regular task in a playbook, but it will only run if a task alerts the handler.
+
+ How do you test Ansible projects?
+Asserts 
+Check Mode 
+Manual Run 
+
+ When do you use {{ }}?
+One of Ansible’s most basic rules is: “Always use {{ }} except when:”
+
+ How do you keep data secret in a playbook?
+If you want to keep secret data but still be able to share it publicly, then use Vault in playbooks. But if you’re using –v (verbose) mode and don’t want anyone to see the results, then use:
+
+name: secret task
+
+shell: /usr/bin/do_something --value={{ secret_value }}
+

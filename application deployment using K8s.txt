@@ -1,0 +1,239 @@
+complete application deplpoyment using K8s components
+
+mongobd pod in order to talk to that pod we need service(internal service)
+mongo express deployment(pod)-
+database URL of mongodb so that mongo express can connect to it
+credentials-DB user,DB pwd- so that athenticate
+
+deployment.yaml
+that why env variables is configured
+
+inside the deploy file
+configmap 
+DB url
+
+inside the deploy file
+secret
+DB user
+Db pwd
+
+external service
+URL
+ip address of the node
+port of external service
+
+request comes from the browser->external service of Mongo express-> mongo express pod-> pod wil connect to mongodb internalservice
+-> mongodb pod->it will authenticate using the credentials->secrets DB-user,db-pwd
+
+step1:- stepup minikube cluster
+kubectl get all
+
+in localhost
+we need to deploy mongodb manifest file
+
+step2
+mongo.yaml
+deplyment file
+image configuration of mongodb
+mongodb container is 27017
+environment variables
+
+step3 
+secrets.yaml
+secrets
+username: 
+pwd:
+
+values must be base64 encoded
+mongo-secret.yaml
+echo -n 'username' | base64
+copy that copy in to secret configuration for the root username
+
+echo -n 'password' | base64
+copy and paste in the password in the secret.yaml file
+
+
+we need to do configuration 
+cd k8s-configuration/
+ls
+mongo-secret.yaml mongo.yaml
+kubectl apply -f mongo-secret.yaml
+kubectl get secret
+we can refernece in the deployment file
+kubectl apply -f mongo.yaml
+kubectl get all
+i should see the 
+pod starting up
+replicasets
+deployments
+
+check 
+kubectl get pod
+kubectl get pod --watch (how time it is taking)
+kubectl describe pod  pod-name(we can also see any problem in the pod)
+
+kubectl get pods
+
+STEP2
+we create an internal service
+--- -> new document is starting
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port:27017
+      targetPort:27017
+
+kubectl apply -f mongo.yaml
+kubectl get service
+kubectl describe service service-name
+kubectl get pod -o wide
+kubectl get all | grep mongodb
+
+which data to connect?
+mongoDB address/internal service
+..MONGODB_SERVER
+
+which credentials to authenticate?
+...ADMINUSERNAME
+...ADMINPASSWORD
+
+config map
+
+apiVersion: v1
+kind: configmap
+metadata:
+   name: mongodb-configmap
+data:
+   database_url:
+
+kubectl apply -f mongo-configmap.yaml
+kubectl apply -f mongo-express.yaml
+kubectl get pod
+kubectl logs pod-name
+kubectl apply -f mongo-express.yaml
+kubectl get service
+minikube service (name-of-service) mongo-express-service
+
+jenkins
+------
+credentials plugin to strore and manage them centrally
+
+credential scopes
+-----------------
+system-> only avaible on jenkins server NOT for jenkins jobs
+global-> everywhere accessible 
+
+Declarative pipeline
+--------------------
+pipeline {
+    agent any {
+    stages {
+      stage("build"){
+        steps {
+          }
+         }
+       }
+    }
+
+agent any-> node,executer on that node,jenkins,cluster,master,slaves,windows,linux etc
+
+pipeline {
+  agent any
+  stages {
+    stage("build") {
+     steps {
+       sh 'npm install'
+  }
+}
+
+stage("test") {
+  steps {
+   }
+}
+
+stage("deploy") {
+  steps {
+     }
+    }
+   }
+}
+
+Prometheus
+==========
+What is prometheus
+Where and why is prometheus used?
+Promethesus architecture
+
+tpically you have multiple servers with containerized applications and -100 of different processes running,which are interconnected
+Response latency
+overloaded
+errrors
+enough resources
+
+when you have tones of applications tat you deploy any one of them can crash and can cause failure of other servers
+and suddenly unavailable to users
+
+that could be difficult and debugging and time consuming
+
+backend running?
+any exceptions?
+auth-service running?
+why did auth-service crash?
+
+initail container failure
+
+constantly monitor all the services
+alert when crash
+identify problem before
+
+how does prometheus work?
+prometheus architecture
+
+main component: Prometheus server
+-does the actual monitoring work
+applications,services,servers(retrival)data retrieval worker-pulls metrics data-> (storage) stores metrics data-> (HTTP Server)-accepts queries[accepts promql queries] 
+ 
+
+simple application step-up on k8s cluster
+step 1- minikube on local machine of AWS 
+step 2-create a docker image
+commands
+docker build --tag imagename
+step 3- push the docker image to docker hub
+
+docker login
+push the docker image to docker hub
+step 4-: Prepare Kubernetes Deployment and Service Files
+create the directory for node.js application
+inside the directory add the deployment.yaml and service.yaml
+step 5- deploy pods
+kubectl apply -f deployment.yml
+step 6 - deploy services
+kubectl aply -f service.yaml
+step 7 - validate the deployment
+kubectl get deployment
+step 8 - access the appilcation
+minikube service node-app-service 
+
+Use Cases for the Deployment Object
+● With the help of deployment, the replica set will be rolled out, which will deploy the
+pods and check the status in the background whether the rollout has succeeded or
+not.
+● If the pod template spec is modified then, the new replica set will be created with the
+new desired state and the old replica set will still exist and you can roll back
+according to the situation.
+● You can roll back to the previous deployment if the current state of the deployment is
+not stable.
+● You can scale up the deployment to manage the loads.
+● You can pause the deployment if you are fixing something in between the
+deployment and then resume it after fixing it.
+● You can clean up those replica sets which are older and no longer needed.
+

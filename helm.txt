@@ -1,0 +1,476 @@
+helm
+-----
+when why
+
+helm is a pakage manager for kubernetes
+apt,yum,homegrow for kubernetes.
+
+to package YAML files and disturbute them in public and private repository.
+
+we have deployed a kubernetes application in kubernetes cluster.
+then we want to an kubernetes in elastic stack for logging
+elastic search additionaly in ks cluster in application to collect its logs
+
+in order to deploy the elastic stack in K8s cluster we would need a components 
+statefulset-databases
+configmap with external configuration
+secrets-creditionals where secrets data are stored
+we would need k8s user with permissions
+services
+
+doing this manually it would difficult so someone in our team creates
+collected all this YAML files and tested it might some time.
+
+someone will created the YAML files and package them up and made them available so that other people can
+also use the same kind of the deployment in the k8s cluster
+that bundle of YAML file is called helm charts
+
+helm charts
+---------
+bundle of YAML files
+create your own helm charts with helm
+push them to helm respository
+download and use existing ones
+
+commonly used deployments like database APPS,elastic search,mongobd,mySQL
+monitoring apps-promethesus
+they all have complex step up
+so these charts are already available in helm respository.
+just helm install chart name
+we can reuse the configuration that someone has already made without additional support.
+
+if you cluster then we need some deploymentbthe command should be available using the command
+helm search <keyword> or helm hub 
+
+there are public registries- 
+private registries: share in organisation
+
+second feature
+---------------
+templating engine
+-----------------
+in K8s cluster,in application there is made up of multiple micro services and deploying all of them in K8s cluster
+and deployment and service configuration is same the only different in application name or version or docker image name, tags is different 
+
+using helm file
+---------------
+we can use common blueprint
+dynamic values are replaced by placeholders
+dynamic values are gonna change.
+
+that would be a template file
+
+apiVersion: v1
+kind: Pod
+metadata:
+ -  name: {{ .Values.container.name }}
+    image: {{ .Values.container.name }}
+    port: {{ .Values.cantainer.port }}
+
+that additional configuration file comes from values.yaml
+
+name: my-app
+container:
+   name: my-app-container
+   image: my-app-image
+   port:9001
+
+values is an object which is created based on the values defined.
+values defined either via yaml file or with --set flag
+
+instead of having multiple YAML file we can have one YAML file
+during build you can replace the values before deploying them.
+
+another USE case
+================
+like micro service application you want to deploy on develpment,staging and production clusters
+instead of deploying the individual YAML files separatly in each cluster 
+we can package them up and make own application chart,so that we can have all the necessary YAML files that particular deployment needs 
+and them we can use them to re-deploy the same in differnet k8s cluster environments using one command which can also make whole deployment processer easier.
+
+helm chart structure
+--------------------
+mychart/
+  Chart.yaml
+  values.yaml
+  charts/
+  templates/
+  ...
+
+my chart folder name. 
+chart.yaml-> meta info about chart-> name,dependencies,version
+values.yaml-> values for the template files. we can override later also
+charts folder-> chart dependencies
+templates foldder-> the actual template files
+
+helm install <chartname>
+when we use helm deploy those YAML files into k8s the template file
+the template files will be filled with the values from values.yaml optionally we can have other files of folder that is readme or licence
+
+how values are injected into helm template file
+===============================================
+in values.yaml
+
+imageName: myapp
+port:8080
+version:1.0.0
+
+we can override using this file by
+my-values.yaml
+version:2.0.0
+
+helm install --values=my-values.yaml <chartname>
+
+these two file can merge and gives a result 
+result
+=====
+imageName: myapp
+port: 8080
+version: 2.0.0
+
+.Values object
+
+third is release management
+===========================
+helm version 2 and 3
+
+helm version 2 comes in two parts:
+helm installation will come in client(helm CLI) and server (Tiller)
+
+whenever we install CLIENT (helm CLI)-> sends requests to tiller 
+->tiller will execute this requests and create components from this YAML files inside the K8s cluster
+this artecheture offers additional value feature of helm which is release management
+
+whenever you create or change deployment-> tiller will store a copy of configuration client side for future reference
+and creating a history of chart executions
+
+keeping track of all chart executions:
+helm install <chartname>
+helm upgrade <chartname>
+
+- changes are applied to existing deployment instead of creating a new one.
+
+suppose YAML files goes wrong like configuration
+we need to use helm rollback <chartname>
+
+disadvantage
+============
+tiller is removed in helm3
+because has too much power inside of K8s cluster
+create,update,delete and has too much of permissions and this makes it actually a big security issue.
+solves the security concern,but makes it more difficult to use
+
+kubernetes client->UI
+kubernetes API->script,curl command
+command line tool-> kubectl
+
+this request have to be in YAML format or JSON format
+
+pod and node
+node1- simple server or physical machine or vitual machine
+pod-smallest unit of k8s
+only 1 application can run on it.
+each pod gets its own IP address
+each pod can communicate with-each other using IP address
+they are empermal in which they can die easily a new one will be created in that place with new IP address
+
+service
+------
+service that can be attached to each pod.
+it is a permanet IP address.
+the life cycle of the service in the POD are connected even if the POD dies,crashes.
+the service and IP address stay.
+
+configMap
+---------
+pod communicate each other using service
+my application has mongo-db-service->usaly it a inside of a built application
+if the service name is changed to mongodb we have to adjust the URL in the application
+using we have to rebuild the application with new version and push it to the respository and pull that new image inside the pod and 
+restart the whole thingS
+
+ConfigMaps
+----------
+it is the external configuration of your application
+configuration like database, url
+in k8s we just connect it with POD so that POD tat gets the data with the configmap that contains
+
+secret it just config map
+-------
+differnece is-> it is used to store secret data
+password and other cerditional will be kept
+
+we can use this file by environmnet variable
+
+volumes
+-------
+datastorage
+in DB there is some data.
+if the database,container or the pod restarted the would be data gone and that is problematic and inconveince because you want your 
+data to be persistedly,relailabily long term. we can do using the components of volumes
+
+it basically attached a physical storage on hard drive to your pod and thats storage can be either local machine,server node where pod is running
+it could be on a remote storage,outside of the k8s cluster. it could be cloud storage or own permise storage which is not pod of the k8s cluster
+
+now we the pod or container gets restarted the data will be there persistently
+
+deployment and stateful
+======================
+if pod dies, if i am facing down time in user placed application
+so with one application with one database pod we are replicating everything on multiple on servers
+another node,where replica,clone of our application would run which also be connected to the service
+
+service
+------
+service is like an persistent static IP address with the DNS name so that no need to constantly adjust end point when pod dies
+service is also a load balancer which service will catch the request and forwarded it to which ever pod list busy
+
+in order to create the second replica with my application pod you wont create a second pod but instead we will find a blueprint
+for my-application pod and speciefy how many replicas of the pod you would like run and blueprint is called deployment
+
+we can create deployment in which how many replicas we will be creating,scale up and down number replicas of pods that we need
+
+statefulset 
+--------
+it is specifically meant for database appilcation like mysql,mongodb,elastic search any other stateful aplication
+databases should be created using statefulsets not deployments
+
+kubectl create deploymnet ngnix-depl --image=nginx
+
+Stateful applications are those applications that contain the previous states or data of the
+applications. If the applications restart or move to other environments then, the data and the
+state of the applications still exist
+
+AUTOSCALING:
+
+Autoscaling is a process that expansion of resources, based on the increasing of load of
+application and autoscaling is performed based on the metrics set by user, if application’s load
+reaches to fixed metrics, will automatically increases the servers.
+
+Types of Autoscaling:
+Horizontal Pod AutoScaling:
+
+In this type, the number of servers will increase according to CPU utilization. In this, you define
+the minimum number of servers, 
+maximum number of servers, and 
+CPU utilization. If the CPU
+utilization crosses more than 70% then, it will add the one server automatically.
+
+Vertical Pod AutoScaling:
+In this type of scaling, the server will remain the same in numbers but the server’s configuration
+will increase such as from 4GB RAM to 8GB RAM, and the same with the other configurations.
+But this is not cost-effective and business-effective. So, we use Horizontal Pod AutoScaling.
+
+DaemonSets:
+In Kubernetes, a DaemonSet ensures that a copy of a pod runs on each node in the cluster. It is
+used for deploying background or system processes that should run on every node, such as log
+collectors, monitoring agents, or other node-level tasks
+
+ReplicaSets:
+A ReplicaSet in Kubernetes is a controller that ensures a specified number of replicas of a pod
+are running at all times. If the number of replicas falls below the given number, the ReplicaSet
+automatically creates new pods to maintain the high availability.(if there are excess replicas, it
+will scale down by terminating unnecessary pods.)
+
+### 1. What is Amazon EKS?
+Amazon Elastic Kubernetes Service (Amazon EKS) is a fully managed Kubernetes service that makes it easier to deploy, manage, and scale containerized applications using Kubernetes.
+
+### 2. How does Amazon EKS work?
+Amazon EKS eliminates the need to install, operate, and maintain your own Kubernetes control plane. 
+It provides a managed environment for deploying, managing, and scaling containerized applications using Kubernetes.
+
+### 3. What is Kubernetes?
+Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications.
+
+### 4. What are the key features of Amazon EKS?
+Key features of Amazon EKS include automatic upgrades, integration with AWS services, high availability with multiple availability zones, 
+security with IAM and VPC, and simplified Kubernetes operations.
+
+### 5. What is a Kubernetes cluster?
+A Kubernetes cluster is a collection of nodes (Amazon EC2 instances) that run containerized applications managed by Kubernetes. 
+It includes a control plane and worker nodes.
+
+### 6. How do you create a Kubernetes cluster in Amazon EKS?
+To create an EKS cluster, you use the AWS Management Console, AWS CLI, or AWS CloudFormation. 
+EKS automatically provisions the control plane and worker nodes.
+
+### 7. What are Kubernetes nodes?
+Kubernetes nodes are the worker machines that run containers. 
+They host pods, which are the smallest deployable units in Kubernetes.
+
+### 8. How does Amazon EKS manage Kubernetes control plane updates?
+Amazon EKS automatically handles the upgrades of the Kubernetes control plane. 
+It schedules and applies updates while ensuring minimal disruption to the applications running on the cluster.
+
+### 9. What is the difference between Amazon EKS and Amazon ECS?
+Amazon EKS provides managed Kubernetes clusters, while Amazon ECS provides managed Docker container orchestration. 
+EKS is better suited for complex microservices architectures using Kubernetes.
+
+### 10. How can you scale applications in Amazon EKS?
+You can scale applications in EKS by adjusting the desired replica count of Kubernetes Deployments or StatefulSets. 
+EKS automatically manages the scaling of underlying resources.
+
+### 11. What is the role of Amazon EKS Managed Node Groups?
+Amazon EKS Managed Node Groups simplify the deployment and management of worker nodes in an EKS cluster. 
+They automatically provision, configure, and scale nodes.
+
+### 12. How does Amazon EKS handle networking?
+Amazon EKS uses Amazon VPC for networking. It creates a VPC and subnets for your cluster, and each pod in the cluster gets an IP address from the subnet.
+
+### 13. What is the Kubernetes Pod in Amazon EKS?
+A Kubernetes Pod is the smallest deployable unit in Kubernetes. 
+It represents a single instance of a running process in the cluster and can consist of one or more containers.
+
+### 14. How does Amazon EKS integrate with AWS services?
+Amazon EKS integrates with various AWS services like IAM for access control, Amazon VPC for networking, and CloudWatch for monitoring and logging.
+
+### 15. Can you run multiple Kubernetes clusters on Amazon EKS?
+Yes, you can run multiple Kubernetes clusters on Amazon EKS, 
+each with its own set of worker nodes and applications.
+
+### 16. What is the difference between Kubernetes Deployment and StatefulSet?
+A Kubernetes Deployment is suitable for stateless applications, while a StatefulSet is designed for stateful applications 
+that require stable network identifiers and ordered, graceful scaling.
+
+### 17. How can you secure an Amazon EKS cluster?
+You can secure an EKS cluster by using AWS Identity and Access Management (IAM) roles, integrating with Amazon VPC for networking isolation, 
+and applying security best practices to your Kubernetes workloads.
+
+### 18. What is the Kubernetes Operator in Amazon EKS?
+A Kubernetes Operator is a method of packaging, deploying, and managing an application using Kubernetes-native APIs. 
+It allows for more automated management of complex applications.
+
+### 19. How can you automate application deployments in Amazon EKS?
+You can use Kubernetes Deployments or other tools like Helm to automate application deployments in Amazon EKS. 
+These tools help manage the lifecycle of containerized applications.
+
+### 20. How does Amazon EKS handle high availability?
+Amazon EKS supports high availability by distributing control plane components across multiple availability zones. 
+It also offers features like managed node groups and Auto Scaling for worker nodes.
+
+### 1. What is Terraform?
+Terraform is an open-source Infrastructure as Code (IaC) tool that allows you to define, manage, 
+and provision infrastructure resources using declarative code.
+
+### 2. How does Terraform work with AWS?
+Terraform interacts with the AWS API to create and manage resources based on the configurations defined in Terraform files.
+
+### 3. What is an AWS provider in Terraform?
+An AWS provider in Terraform is a plugin that allows Terraform to interact with AWS services by making API calls.
+
+### 4. How do you define resources in Terraform?
+Resources are defined in Terraform using HashiCorp Configuration Language (HCL) syntax in `.tf` files. Each resource type corresponds to an AWS service.
+
+### 5. What is a Terraform state file?
+The Terraform state file maintains the state of the resources managed by Terraform. 
+It's used to track the actual state of the infrastructure.
+
+### 6. How can you initialize a Terraform project?
+You can initialize a Terraform project using the `terraform init` command. It downloads required provider plugins and initializes the backend.
+
+### 7. How do you plan infrastructure changes in Terraform?
+You can use the `terraform plan` command to see the changes that Terraform will apply to your infrastructure before actually applying them.
+
+### 8. What is the `terraform apply` command used for?
+The `terraform apply` command applies the changes defined in your Terraform configuration to your infrastructure. It creates, updates, or deletes resources as needed.
+
+### 9. What is the purpose of Terraform variables?
+Terraform variables allow you to parameterize your configurations, making them more flexible and reusable across different environments.
+
+### 10. How do you manage secrets and sensitive information in Terraform?
+Sensitive information should be stored in environment variables or external systems like AWS Secrets Manager. 
+You can use variables to reference these values in Terraform.
+
+### 11. What is remote state in Terraform?
+Remote state in Terraform refers to storing the state file on a remote backend, 
+such as Amazon S3, instead of locally. This facilitates collaboration and enables locking.
+
+### 12. How can you manage multiple environments (dev, prod) with Terraform?
+You can use Terraform workspaces or create separate directories for each environment, each with its own state file and variables.
+
+### 13. How do you handle dependencies between resources in Terraform?
+Terraform automatically handles dependencies based on the resource definitions in your configuration. It will create resources in the correct order.
+
+### 14. What is Terraform's "apply" process?
+The "apply" process in Terraform involves comparing the desired state from your configuration to the current state, generating an execution plan, and then applying the changes.
+
+### 15. How can you manage versioning of Terraform configurations?
+You can use version control systems like Git to track changes to your Terraform configurations. Additionally, Terraform Cloud and Enterprise offer versioning features.
+
+### 16. What is the difference between Terraform and CloudFormation?
+Terraform is a multi-cloud IaC tool that supports various cloud providers, including AWS. CloudFormation is AWS-specific and focuses on AWS resource provisioning.
+
+### 17. What is a Terraform module?
+A Terraform module is a reusable set of configurations that can be used to create multiple resources with a consistent configuration.
+
+### 18. How can you destroy infrastructure created by Terraform?
+You can use the `terraform destroy` command to remove all resources defined in your Terraform configuration.
+
+### 19. How does Terraform manage updates to existing resources?
+Terraform applies updates by modifying existing resources rather than recreating them. This helps preserve data and configurations.
+
+### 20. Can Terraform be used for managing third-party resources?
+Yes, Terraform has the capability to manage resources beyond AWS. It supports multiple providers, making it versatile for managing various cloud and on-premises resources.
+
+### 1. What is Amazon Virtual Private Cloud (VPC)?
+Amazon VPC is a logically isolated section of the AWS Cloud where you can launch resources in a virtual network that you define. 
+It allows you to control your network environment, including IP addresses, subnets, and security settings.
+
+### 2. What are the key components of Amazon VPC?
+Key components of Amazon VPC include subnets, route tables, network access control lists (ACLs), security groups, and Virtual Private Gateways (VPGs).
+
+### 3. How does Amazon VPC work?
+Amazon VPC enables you to create a private and secure network within AWS. You define IP ranges for your VPC, create subnets, and configure network security.
+
+### 4. What are VPC subnets?
+VPC subnets are segments of the VPC's IP address range. They allow you to isolate resources and control access by creating public and private subnets.
+
+### 5. How can you connect your on-premises network to Amazon VPC?
+You can establish a Virtual Private Network (VPN) connection or use AWS Direct Connect to connect your on-premises network to Amazon VPC.
+
+### 6. What is a VPC peering connection?
+VPC peering allows you to connect two VPCs together, enabling resources in different VPCs to communicate as if they were on the same network.
+
+### 7. What is a route table in Amazon VPC?
+A route table defines the rules for routing traffic within a VPC. It determines how traffic is directed between subnets and to external destinations.
+
+### 8. How do security groups work in Amazon VPC?
+Security groups act as virtual firewalls for your instances, controlling inbound and outbound traffic. They can be associated with instances and control their network access.
+
+### 9. What are network access control lists (ACLs) in Amazon VPC?
+Network ACLs are stateless filters that control inbound and outbound traffic at the subnet level. They provide an additional layer of security to control traffic flow.
+
+### 10. How can you ensure private communication between instances in Amazon VPC?
+You can create private subnets and configure security groups to allow communication only between instances within the same subnet, enhancing network security.
+
+### 11. What is the default VPC in Amazon Web Services?
+The default VPC is a pre-configured VPC that is created for your AWS account in each region. It simplifies instance launch but doesn't provide the same level of isolation as custom VPCs.
+
+### 12. Can you peer VPCs in different regions?
+No, VPC peering is limited to VPCs within the same region. To connect VPCs across regions, you would need to use VPN or AWS Direct Connect.
+
+### 13. How can you control public and private IP addresses in Amazon VPC?
+Amazon VPC allows you to allocate private IP addresses to instances automatically. 
+Public IP addresses can be associated with instances launched in public subnets.
+
+### 14. What is a VPN connection in Amazon VPC?
+A VPN connection allows you to securely connect your on-premises network to your Amazon VPC using encrypted tunnels over the public internet.
+
+### 15. What is an Internet Gateway (IGW) in Amazon VPC?
+An Internet Gateway enables instances in your VPC to access the internet and allows internet traffic to reach instances in your VPC.
+
+### 16. How can you ensure high availability in Amazon VPC?
+You can design your VPC with subnets across multiple Availability Zones (AZs) to ensure that your resources remain available in the event of an AZ outage.
+
+### 17. How does Amazon VPC provide isolation?
+Amazon VPC provides isolation by allowing you to define and manage your own virtual network environment, including subnets, route tables, and network ACLs.
+
+### 18. Can you modify a VPC after creation?
+While you can modify certain attributes of a VPC, such as its IP address range and subnets, some attributes are immutable, like the VPC's CIDR block.
+
+### 19. What is a default route in Amazon VPC?
+A default route in a route table directs traffic to the Internet Gateway (IGW), allowing instances in public subnets to communicate with the internet.
+
+### 20. What is the purpose of the Amazon VPC Endpoint?
+An Amazon VPC Endpoint enables you to privately connect your VPC to supported AWS services and VPC endpoint services without needing an internet gateway or VPN connection.
+
