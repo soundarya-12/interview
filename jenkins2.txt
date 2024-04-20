@@ -1,0 +1,92 @@
+jenkins
+-------
+jenkins is an open-source automation server used for continuous integration
+and continuous delivery
+
+it automates the process of building,testing and deploying software application,
+allowing teams to deliver high-quality software faster
+
+What is a Jenkins Pipeline?
+a jenkins pipeline is a suite of plugins that allows teams to define their software 
+delivery process as code.
+it enables the creation of complex workflows,including build,test and deployment stages 
+which can be version-controlled alongside application
+
+how do you define jenkins pipeline
+
+jenkins pipeline which is the text file written in groovy syntax
+
+jenkinsfile describes the stages,steps and configuration of the pipeline,allowing for automated and repeatable
+software delivery processes
+
+Explain the difference between scripted and declarative Jenkins Pipelines
+scripted pipeline
+groovy syntax
+flexibilty and power
+more coding effort
+
+scripted pipeline use a groovy-based scripting language
+to define pipeline logic,providing more flexibility and power but requiring more coding effort
+
+declarative pipeline use a simpler more structured syntax for defining pipelines,making them easier to read, write and
+maintain
+
+What is a Jenkins Agent (Node), and how does it work?
+a jenkins agent also known as a node,is a machine (physical or virtual) that executes tasks as part of a jenkins build process
+agents can run on the same machine as the jenkins server(master) or on remote machines
+they communicate with the jenkins master to receive build instructions and report results
+
+Explain the purpose of Jenkins plugins.
+jenkins plugins extend the functionality of jenkins automation server by providing
+plugins can be used to support varios tasks such as source code management,build tools,
+testing frameworks, deployment platforms, and notification systems
+
+how do you secure jenkins?
+->jenkins can be secured by enabling authentication mechanism like
+LDAP,active directory,or OAuth
+->access control can be configured using role-based security which defines
+permissions for users and groups
+->jenkins connections can be encrypted using HTTPS, and security plugins can be installed to
+enhance protection against vulerabilties
+
+What is the Jenkinsfile and how is it used?
+thevjenkinsfile is a text file written in groovy syntax that defines
+the configuration of a jenkins pipeline.
+it describes the stages,steps and post-build actions of the pipeline,
+allowing teams to define their software delivery process as code and manage
+it alongside applocation code in version control systems like git
+
+Explain Jenkins build triggers and how they work.
+jenkins build triggers are mechanisms that initiate a build job based on specific
+events or conditions
+triggers can be configured to start a build periodically
+(eg cron schedule) when changes are pushed to a version control system(e.g git webhook)
+or when other build jobs complete (e.g downstream/upstream dependencies)
+
+How do you automate deployments using Jenkins?
+->deployments can be automated using jenkins pipeline or freestyle projects
+with appropriate build steps and post-build actions
+
+jenkins can execute deployment scripts, interact with deployment tools and platform
+(e.g kubernetes,docker,AWS) and trigger deployments based on pre-defined conditions or user inputs
+
+What are Jenkins build artifacts, and how are they used?
+jenkins build artifacts are files generated during the build process such as complied binaries,test results,
+documentation and archives
+
+artifacts are stored on the jenkins server or external artifact respositories and can be
+accessed, archived,published or used in downstream jobs for further processing or deployment
+
+Explain the concept of Jenkins pipeline stages.
+jenkins pipelines stages represent distinct phases or steps in a software delivery process such as build,test,deploy and notify
+
+each stage can contain one or more build steps,tests or actions and can be configured to run sequentially
+in parallel, or conditionally based specific criteria
+
+How do you troubleshoot Jenkins build failures?
+jenkins build failures can be troubleshooted by reviewing build logs,console output and error
+message
+
+debugging techniques include enabling verbose logging,examing jenkins server and agent configuration,checking for resource contraints
+verifying dependenies, and analyzing code changes that may have introduced errors
+
