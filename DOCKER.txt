@@ -1,0 +1,137 @@
+Docker
+
+1.ADD		Add local or remote files and directories.
+2.ARG		Use build-time variables.
+3.CMD		Specify default commands.
+4.COPY		Copy files and directories.
+5.ENTRYPOINT	Specify default executable.
+6.ENV		Set environment variables.
+7.EXPOSE	Describe which ports your application is listening on.
+8.FROM		Create a new build stage from a base image.
+9.HEALTHCHECK	Check a container's health on startup.
+10.LABEL	Add metadata to an image.
+11.MAINTAINER	Specify the author of an image.
+12.ONBUILD	Specify instructions for when the image is used in a build.
+13.RUN		Execute build commands.
+14.SHELL	Set the default shell of an image.
+15.STOPSIGNAL	Specify the system call signal for exiting a container.
+16.USER		Set user and group ID.
+17.VOLUME	Create volume mounts.
+18.WORKDIR	Change working directory.
+
+FROM – FROM is used to specify the base image to be used by the application/container. 
+LABEL – This instruction is used to provide metadata to an image.
+ENV – To set environment variables in a Docker container, ENV is used. You can have multiple variables in a single Dockerfile.
+ARG – It defines build-time variables that users can pass at build-time to the builder with the docker build command.
+WORKDIR – It sets the working directory for the instructions that follow.
+RUN – Used to run a Linux command and install packages into containers, create folders, etc.
+COPY – This copies files and directories from the host machine to the container.
+ADD – It copies files and directories to the container from the host machine as well as from the URL location. It can also unpack compressed files.
+VOLUME – It creates a directory mount point to access and store persistent data.
+EXPOSE – It is used to expose ports on the containers, and it informs Docker that the container listens on the exposed network ports at runtime.
+ENTRYPOINT – It provides a command and arguments for an executing container. If the user specifies any arguments or 
+commands at the end of the “docker run” command, the specified command overrides the default in CMD instruction.
+CMD – It provides defaults for executing containers and there can be only one CMD. It is used to set a command to be executed when running a container.
+
+21. Dockerize the python flask application.
+
+FROM python:3.7-alpine
+RUN mkdir /app
+WORKDIR /app
+ADD requirements.txt /app
+ADD main.py /app
+RUN pip3 install -r requirements.txt
+CMD ["gunicorn", "-w 4", "-b", "0.0.0.0:8000", "main:app"]
+
+22. Dockerize the nodejs application
+
+# Create image based on the official Node image from dockerhub
+FROM node:lts-buster
+ 
+# Create app directory
+WORKDIR /usr/src/app
+ 
+# Copy dependency definitions
+COPY package.json ./package.json
+COPY package-lock.json ./package-lock.json
+ 
+# Install dependencies
+#RUN npm set progress=false \
+#    && npm config set depth 0 \
+#    && npm i install
+RUN npm ci
+ 
+# Get all the code needed to run the app
+COPY . .
+ 
+# Expose the port the app runs in
+EXPOSE 3000
+ 
+# Serve the app
+CMD ["npm", "start"]
+
+23  dockerize the spring boot application
+
+FROM openjdk:8-jdk-alpine
+MAINTAINER baeldung.com
+COPY target/docker-message-server-1.0.0.jar message-server-1.0.0.jar
+ENTRYPOINT ["java","-jar","/message-server-1.0.0.jar"]
+Copy
+This file contains the following information:
+
+FROM: As the base for our image, we’ll take the Java-enabled Alpine Linux created in the previous section.
+MAINTAINER: The maintainer of the image.
+COPY: We let Docker copy our jar file into the image.
+ENTRYPOINT: This will be the executable to start when the container is booting. 
+We must define them as JSON-Array because we’ll use an ENTRYPOINT in combination with a CMD for some application arguments.
+To create an image from our Dockerfile, we have to run ‘docker build’ like before:
+
+24 dockerize the java web application
+
+# Pull base image.
+FROM ubuntu:latest
+
+RUN \
+# Update
+apt-get update -y && \
+# Install Java
+apt-get install default-jre -y
+
+ADD ./target/gs-serving-web-content-0.1.0.jar spring-mvc-example.jar
+
+EXPOSE 8080
+
+CMD java -jar spring-mvc-example.jar
+
+25. Dockerize the reactjs application....
+
+1. What is docker-compose?
+
+Docker Compose is a tool for defining and running multi-container applications. 
+It is the key to unlocking a streamlined and efficient development and deployment experience.
+
+for each application we should separate 
+each container have one application. nginx having nginx, httpd having httpd
+it is not recommended to install multiple applications inside a single containers.
+multiple containers at a time.
+
+2. What is docker swarm?
+
+Docker Swarm is a clustering and scheduling tool for Docker containers. 
+With Swarm, IT administrators and developers can establish and manage a cluster of Docker nodes as a single virtual system. 
+Swarm mode also exists natively for Docker Engine, the layer between the OS and container images.
+
+docker container exec- run a command in a running container
+
+docker container cp- copyies files and folder btw a container and local
+
+docker container diff- inspect changes files or directories on a containers filesystem
+
+docker container export -export a container filesytem as tar archive
+
+docker container inspect-detail info of one or more containers
+
+docker container prune-remove all stoped containers
+
+docker container kill-kill running container
+

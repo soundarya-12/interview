@@ -1,0 +1,522 @@
+python
+======
+1)swaping of two numbers
+
+num1=10
+num2=20
+print("value of num1 before swapping:",num1)
+print("value of num2 before swapping:",num2)
+
+temp=num1
+num1=num2
+num2=temp
+
+print("value of num1 after swapping:",num1)
+print("value of num2 after swapping:",num2)
+
+2)check whether prime or not
+--------------------------
+
+natural number > 1
+which has only 2 factors 1 and itself
+
+19=> 1 and 19=>prime number
+28->1,2,4,7,14,28->not a prime number
+
+num=5/28
+count=0
+
+if num > 1:
+   for i in range(1,num+1):
+       if (num%i) == 0# modular division
+         count=count+1
+     if count==2
+        print("number is prime")
+
+3)factorial of a number
+-----------------------
+num=5
+1*2*3*4*5=120
+loop statements
+recursive apraoch
+
+factorial=1
+num=5
+if num<0:
+    print("factorial does not exist for negative numbers")
+elif num==0:
+    print("the factorial of 0 is 1")
+else:
+    for i in range(1,num+1):
+      factorial=factorial*i
+    print("factorial of",num,"is",factorial)
+
+recurssive appoarch
+-------------------
+def factorial(n):
+  if(n==0 or n==1):
+      return 1
+  else:
+      return n * factorial(n-1)
+num=5
+print("factorial of", num , "is", factorial(num))
+
+pattern program
+--------------
+1
+12
+123
+1234
+12345
+
+n = int(input("enter the number of rows:"))
+for i in range(1,n+1):
+  for j in range(1,i+1):    
+   print(j,end="")#empty string
+  print()# to print the new line
+
+1
+22
+333
+4444
+55555
+
+n = int(input("enter the number of rows:"))
+for i in range(1,n+1):
+  for j in range(1,i+1):    
+   print(i,end="")#empty string
+  print()# to print the new line
+
+*
+* *
+*   *
+*     *
+* * * * *
+
+n= int(input("enter the number of rows"))
+for row in range(n):
+    for col in range(n):
+      if col==0 or row==(n-1) or row==col:
+         print("*",end="")
+      else:
+         print(end="")
+     print()
+
+p
+py
+pyt
+pyth
+pytho
+python
+
+--------
+string = input("enter the string:")
+length = len(string)
+
+#for loop within the for loop
+for row in range(length):# start and end
+    for col in range(row+1)# we get col 0, 0 1, 0 1 2
+       print(string[col],end ="")
+    print() # want new line
+
+
+
+
+1
+23
+456
+78910
+
+n = int(intput("enter the number of rows:"))
+num=1
+for row in range(1,n+1):
+   for col in range(1,row+1):
+       print(num,end="")
+       num=num+1
+   print()
+
+fibonacci series
+----------------
+0 1      1          2          3          5          8          13
+n1 n1,n2 sum(n1+n2) sum(n1+n2) sum(n1+n2) sum(n1+n2) sum(n1+n2) sum(n1+n2)
+
+n1=0
+n2=1
+
+print(n1)
+print(n2)
+
+for i in range(2,10):
+    sum=n1+n2
+    print(sum)
+    n1=n2
+    n2=sum
+
+sum of elements in an array
+--------------------------
+i/p->arr[] = {1,2,3}
+o/p->6
+
+arr=[1,2,3,4,5]
+print(sum(arr))
+
+selection sort
+---------
+list1 = [56,3,2,78,6,0]
+min_val = min(list1)
+print(min_val)
+
+or
+
+print(min(list1))
+
+find max and min elements in array
+-----------------
+input- {10,20,4}
+output- 4
+
+arr=[1,2,3,4,5]
+max=arr[0]
+len(arr)
+for i in range(1,n)
+   if arr[i]>max:
+      max=arr[i]
+print(max)
+print(min)
+or
+
+list1 = [56,3,2,78,6,0]
+
+print(min(list1))
+print(max(list1))
+
+how to find length of a list 
+----------------------------
+
+approach1
+
+mylist=[1,4,6,7,8]
+print(mylist)
+count=0
+for i in mylist:
+   count=count+1
+print("lenght f list is:",count)
+
+or
+
+mylist=[1,4,6,7,8,10,12,14,15]
+print(mylist)
+print("length of list using len", len(mylist))
+
+how to swap first and last elements in a list
+--------------------------------------------
+i/p: [12,35,9,56,24]
+o/p: [24,35,9,56,12]
+
+i/p: [1,2,3]
+o/p: [3,2,1]
+
+mylist=[12,35,9,56,24]
+size=len(mylist)
+temp=mylist[0]
+mylist[0]=mylist[size-1]
+mylist[size-1]=temp
+print("list after swapping",mylist)
+
+how to swap two elements in a list
+=================================
+i/p: list[23,65,19,90] pos1=1,pos2=3
+o/p: [19,65,23,90]
+
+i/p: list[1,2,3,4,5] pos1=2,pos2=5
+o/p: [1,5,3,4,2]
+
+mylist=[23,65,19,90]
+print(mylist)
+pos1,pos2=1,3
+mylist[pos1],mylist[pos2]=mylist[pos2],mylist[pos1]
+print(mylist)
+
+how to remove nth occurrence of the word from a list
+--------------------------------------------
+
+mylist=["geeks","for","geeks"]
+word="geeks"
+n=2
+count=0
+for i in range (0,len(mylist))
+    if(mylist[i]==word):
+       count=count+1
+       if(count==n):
+         del mylsit[i]
+
+how to search an element in a list
+-----------------------------------
+mylist=[1,6,3,5,3,4]
+ele=4
+-element found
+ele=100
+-element not found
+
+list=[1,6,3,5,3,4]
+ele=4/100
+flag=0
+
+for i in mylist:
+   if(i==ele):
+     print("element found")
+     flag=1
+     break
+if(flag==0):
+   print("element not found")
+
+or
+
+list=[1,6,3,5,3,4]
+ele=5
+if(ele in list):
+   print("element found")
+else:
+   print("element not found")
+
+how to clear a list
+-------------------
+i/p: list=[1,6,3,5,3,4]
+o/p: list=[]
+
+mylist= [6,0,4,1]
+print("mylist before clear:", mylist)
+mylist.clear()
+print("mylist after clear:", mylist)
+
+or
+
+mylist=[6,0,4,1]
+print("mylist before clear:",mylist)
+mylist *=0
+print("mylist after clear:",mylist)
+
+python program to count the vowels in the given sentence
+
+AEIOU
+
+sentence= input("enter the sentence")
+string = sentence.lower()
+print(string)
+count=0
+list= ["a","e","i","o","u"]
+for char in string:
+    if char in list:
+       count=count+1
+print("number vowels in given sentence is:",count)
+
+how to reverse a list
+--------------------
+i/p: list[10,11,12,13,14,15]
+o/p: list[15,14,13,12,11,10]
+
+mylist=[10,11,12,13,14,15]
+print("mylist before reverse:",mylist)
+mylist.reverse()
+print("mylist after reverse:",mylist)
+
+mylist=[10,11,12,13,14,15]
+print("mylist before reverse:",mylist)
+mylist2=mylist[::-1]
+print("mylist2 after reverse:",mylist2)
+
+how to clone or copy a list
+---------------------------
+i/p: list =[4,8,2,10,15,18]
+o/p: list=[4,8,2,10,15,18]
+
+approach1: using slicing technique
+
+list=[4,8,2,10,15,18]
+list_copy=list[:]
+print(list)
+
+list()
+----
+list=[4,8,2,10,15,18]
+list_copy=[10,20,30]
+mylist_copy.extend(mylist)
+print(list_copy)
+
+copy()
+-------
+list=[4,8,2,10,15,18]
+list_copy=list.copy()
+print(list.copy)
+
+list comprehension
+-------
+list=[4,8,2,10,15,18]
+list_copy=[i for i in list]
+print(list_copy)
+
+count occurence of an element in a list
+-----------------------------------
+i/p: list=[15,6,7,10,12,20,10,28,10]
+x=10
+o/p:3
+
+list=[15,6,7,10,12,20,10,28,10]
+x=10
+count=0
+
+for ele in list:
+     if(ele==x):
+      count=count+1
+print("{} has occured {} times".format(x,count))
+
+
+list=['c','h','e','n','n','a','i']
+x='n'
+count=0
+
+for ele in list:
+     if(ele==x):
+      count=count+1
+print("{} has occured {} times".format(x,count))
+
+using count()
+-----------
+list=[15,6,7,10,12,20,10,28,10]
+x=10
+print("{} has occured {} times".format(x,list.count(x)))
+
+find sum of elements in a list
+-----------------------------
+list=[5,10,15,20]
+total=0
+for i in range(0,len(list)):
+     total=total+list[i]
+print("sum of all elements in given list:",total)
+
+list=[5,10,15,20]
+total=sum(list)
+print("sum of all elements in given list:",total)
+
+Multiply All Numbers in the List
+--------------------------------
+i/p: list=[3,2,4]
+o/p:24
+
+list=[3,2,4]
+result=1
+
+for x in list:
+    result=result*x
+print(result)
+
+Find Smallest & Largest Numbers in a List
+-----------------------------------------
+
+i/p
+list=[20,100,20,1,10]
+
+list=[20,100,20,1,10]
+list.sort()
+print(list)
+
+print("smallest element is:",list[0])
+print("largest element is:",list[-1])
+
+using min() and max()
+list=[20,100,20,1,10]
+print("smallest element is:",min(list))
+print("largest element is:",max(list))
+
+19:Find 2nd Largest Number in a List
+i/p:list=[70,11,20,4,100]
+o/p:70
+
+list=[70,11,20,4,100]
+list.sort()
+print(list)
+print("first largest number is:",list[-1])
+print("second largest number is:",list[-2])
+
+(or)
+
+list =[10,20,4,45,99]
+list1=set(list)
+list1.remove(max(list))
+print(list1)
+print(max(list1))
+
+Check String is Palindrome or Not
+---------------------------------
+starting and ending should be the same-it s palindrome
+starting ending not same-not a palindrome
+
+s=input("enter a string")
+revstr=(s[::-1])
+if revstr==s:
+    print("palindrome")
+else:
+    print("not palindrome")
+
+:How To Reverse Words in a String
+---------------------------------
+i/p-> str="welcome to python programming"
+o/p-> programming python to welcome
+
+str ="welcome to python programming"
+words=str.split("")
+print(words)
+
+words=words[-1::-1]
+print(words)
+
+outputstr=''.join(words)
+print(outputstr)
+
+Find Sub string Presence in a String
+------------------------------------
+str="welcome to python programming"
+sub_str="python"
+
+print(str.find(sub_str))
+if(str.find(sub_str)==-1):
+  print("not found")
+else:
+  print("found")
+
+find length of a string
+-----------------------
+i/p:welcome
+o/p:7
+
+using loop
+----------
+str="welcome"
+counter=0
+for i in str:
+  counter=counter+1
+print(counter)
+
+using while loop & slicing
+--------------------------
+str="welcome"
+counter=0
+while str[counter:]
+   counter=counter+1
+print(counter)
+
+Check if a string contains any special character
+-----------------------------------------------
+i/p: "welcome@@2to%%Python**Programming@!!^%%@$"
+o/p: string contains special chars
+
+i/p: "welcome to python programming" 
+o/p:no special chars in a string
+
+import re
+str="welcome@@2to%%Python**Programming@!!^%%@$"
+regex=re.compile('[@_!#$%^&*()<>?/\}{~:]')
+if(regex.search(str)==None):
+    print("no special characters present in a string")
+else:
+    print("string contains special characters")
