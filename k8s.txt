@@ -1,0 +1,825 @@
+Kubernetes is a container orchestration tool, it helps to automate the deployment, scaling
+and managing the containerised applications.
+
+k8s architecture
+Master-plane/Control plane
+--------------------------
+Apiserver:
+==========
+It is the main communication point of the control-plane and it exposes externally
+
+Scheduler:
+==========
+Once the API Server gathers the information from the Controller Manager, the API Server
+notifies the Scheduler to perform the respective task such as increasing the number of pods,
+etc. After getting notified, the Scheduler takes action on the provided work
+
+Etcd:
+=====
+Etcd is like a database that stores all the pieces of information of the cluster such as Pods IP,
+Nodes, networking configs, etc. Etcd stored data in key-value pairs. The data comes from the
+API Server to store in etc
+
+Controller Manager:
+===================
+The controller Manager collects the data/information from the API Server of the Kubernetes
+cluster like the desired state of the cluster and then decides what to do by sending the
+instructions to the API Server
+
+Components of nodes:
+--------------------
+Kubelet:
+=======
+It ensures that the pod is always running, if not it will communicate with the control-plane with
+the help of apiserver makes the pod to running state.
+
+Kube-proxy:
+===========
+kube-proxy contains all the network configuration of the entire cluster such as pod IP, etc. It is
+responsible for networking, it takes care of load balancing and routing.
+
+Container-runtime:
+==================
+It is responsible for running containers
+
+kubernetes- PODs
+================
+a pod consists of one or more containers.
+
+The first way is through the command line and 
+the second is through a manifest file. 
+You will likely spend time in both of them where the manifest file is your configuration stored in version control 
+and the command line would be used for troubleshooting purposes.
+
+apiVersion: v1 #version of the API to use
+kind: Pod #What kind of object we're deploying
+metadata: #information about our object we're deploying
+ name: nginx-pod
+spec: #specifications for our object
+ containers:
+ - name: nginx-container #the name of the container within the pod
+ image: nginx #which container image should be pulled
+ ports:
+ - containerPort: 80 #the port of the container within the pod
+
+kubectl apply -f [manifest file].yml
+kubectl get pods
+kubectl describe pod [pod name]
+
+Replica Sets
+Replica Sets are a level above pods that ensures a certain number of pods are always running. 
+A Replica Set allows you to define the number of pods that need to be running at all times 
+and this number could be “1”. 
+If a pod crashes, it will be recreated to get back to the desired 
+state. 
+
+Deployments
+===========
+Deployments manage replica sets and replica sets manage pods and pods manage 
+containers 
+Deployments are a construct a level above replica sets and actually manage the 
+replica set objects.
+Deployments 
+ensure that we can safely rollout new versions of our pods safely and without outages. They 
+also make it possible to rollback a deployment if there is some terrible issue with the new 
+version
+
+apiVersion: apps/v1 #version of the API to use
+kind: Deployment #What kind of object we're deploying
+metadata: #information about our object we're deploying
+ name: nginx-deployment #Name of the deployment
+ labels: #A tag on the deployments created
+ app: nginx
+spec: #specifications for our object
+ replicas: 2 #The number of pods that should always be running
+ selector: #which pods the replica set should be responsible for
+ matchLabels:
+ app: nginx #any pods with labels matching this I'm responsible 
+for.
+ template: #The pod template that gets deployed
+ metadata:
+ labels: #A tag on the replica sets created
+ app: nginx
+ spec:
+ containers:
+ - name: nginx-container #the name of the container within the pod
+ image: nginx #which container image should be pulled
+ ports:
+ - containerPort: 80 #the port of the container within the pod
+
+kubectl apply -f [manifest file].yml
+kubectl get deployments
+There are several columns listed here but the gist of it is:
+• DESIRED – 2 replicas of the application were in our configuration.
+• CURRENT – 2 replicas are currently running.
+• UP-TO-DATE – 2 replicas that have been updated to get to the configuration we specified.
+• AVAILABLE – 2 replicas are available for use
+Deployments can take an existing set and perform a rolling update on them
+
+apiVersion: apps/v1 #version of the API to use
+kind: Deployment #What kind of object we're deploying
+metadata: #information about our object we're deploying
+ name: nginx-deployment #Name of the deployment
+ labels: #A tag on the deployments created
+ app: nginx
+spec: #specifications for our object
+ strategy:
+ type: RollingUpdate
+ rollingUpdate: #Update Pods a certain number at a time
+ maxUnavailable: 1 #Total number of pods that can be unavailable at 
+once
+ maxSurge: 1 #Maximum number of pods that can be deployed above 
+desired state
+ replicas: 6 #The number of pods that should always be running
+ selector: #which pods the replica set should be responsible for
+ matchLabels:
+ app: nginx #any pods with labels matching this I'm responsible 
+for.
+ template: #The pod template that gets deployed
+ metadata:
+ labels: #A tag on the replica sets created
+ app: nginx
+ spec:
+ containers:
+ - name: nginx-container #the name of the container within the pod
+ image: nginx:1.7.9 #which container image should be pulled
+ ports:
+ - containerPort: 80 #the port of the container within the pod
+
+kubectl apply -f [new manifest file].yml
+kubectl get deployments
+kubectl rollout status deployment [deployment name]
+
+Kubernetes – Services and Labels
+
+Labels are just a key value pair, 
+or tag, that provides metadata on our objects. A Kubernetes Service can select the pods it is 
+supposed to abstract through a label selector
+
+Services
+e we have a single Service that is front-ending 
+two of our pods. The two pods have labels named “app: nginx” and the Service has a label 
+selector that is looking for those same labels. This means that even though the pods might 
+change addresses, as long as they are labeled correctly, the service, which stays with a 
+constant address, will send traffic to them
+
+apiVersion: apps/v1 #version of the API to use
+kind: Deployment #What kind of object we're deploying
+metadata: #information about our object we're deploying
+ name: nginx-deployment #Name of the deployment
+ labels: #A tag on the deployments created
+ app: nginx
+spec: #specifications for our object
+ replicas: 2 #The number of pods that should always be running
+ selector: #which pods the replica set should be responsible for
+ matchLabels:
+ app: nginx #any pods with labels matching this I'm responsible 
+for.
+ template: #The pod template that gets deployed
+ metadata:
+ labels: #A tag on the replica sets created
+ app: nginx
+ spec:
+ containers:
+ - name: nginx-container #the name of the container within the pod
+ image: nginx #which container image should be pulled
+ ports:
+ - containerPort: 80 #the port of the container within the pod
+---
+apiVersion: v1 #version of the API to use
+kind: Service #What kind of object we're deploying
+metadata: #information about our object we're deploying
+ name: ingress-nginx #Name of the service
+spec: #specifications for our object
+ type: NodePort #Ignore for now discussed in a future post
+ ports: #Ignore for now discussed in a future post
+ - name: http
+ port: 80
+ targetPort: 80
+ nodePort: 30001
+ protocol: TCP
+ selector: #Label selector used to identify pods
+ app: nginx
+
+kubectl apply -f [manifest file].yml
+kubectl get services
+
+Services and Labels
+
+apiVersion: apps/v1 #version of the API to use
+kind: Deployment #What kind of object we're deploying
+metadata: #information about our object we're deploying
+ name: nginx-deployment #Name of the deployment
+ labels: #A tag on the deployments created
+ app: nginx
+spec: #specifications for our object
+ replicas: 2 #The number of pods that should always be running
+ selector: #which pods the replica set should be responsible for
+ matchLabels:
+ app: nginx #any pods with labels matching this I'm responsible 
+for.
+ template: #The pod template that gets deployed
+ metadata:
+ labels: #A tag on the replica sets created
+ app: nginx
+ spec:
+ containers:
+ - name: nginx-container #the name of the container within the pod
+ image: nginx #which container image should be pulled
+ ports:
+ - containerPort: 80 #the port of the container within the pod
+---
+apiVersion: v1 #version of the API to use
+kind: Service #What kind of object we're deploying
+metadata: #information about our object we're deploying
+ name: ingress-nginx #Name of the service
+spec: #specifications for our object
+ type: NodePort #Ignore for now discussed in a future post
+ ports: #Ignore for now discussed in a future post
+ - name: http
+ port: 80
+ targetPort: 80
+ nodePort: 30001
+ protocol: TCP
+ selector: #Label selector used to identify pods
+ app: nginx
+
+kubectl apply -f [manifest file].yml
+kubectl get services
+
+
+Features of Kubernetes
+● AutoScaling: Kubernetes supports two types of autoscaling horizontal and vertical
+scaling for large-scale production environments which helps to reduce the downtime of
+the applications.
+● Auto Healing: Kubernetes supports auto healing which means if the containers fail or
+are stopped due to any issues, with the help of Kubernetes components(which will talk in
+upcoming days), containers will automatically repaired or heal and run again properly.
+● Load Balancing: With the help of load balancing, Kubernetes distributes the traffic
+between two or more containers.
+● Platform Independent: Kubernetes can work on any type of infrastructure whether it’s
+On-premises, Virtual Machines, or any Cloud.
+● Fault Tolerance: Kubernetes helps to notify nodes or pods failures and create new pods
+or containers as soon as possible
+● Rollback: You can switch to the previous version.
+● Health Monitoring of Containers: Regularly check the health of the monitor and if any
+container fails, create a new container.
+● Orchestration: Suppose, three containers are running on different networks
+(On-premises, Virtual Machines, and On the Cloud). Kubernetes can create one cluster
+8
+that has all three running containers from different networks.
+
+ClusterIP
+=========
+Whenever a service is created a unique IP address is assigned to the service and that IP 
+Address is called the “ClusterIP”. Now since we need our Services to stay consistent, the IP 
+address of that Service needs to stay the same.
+what you should know is that this ClusterIP isn’t accessible from outside of the 
+Kubernetes cluster. This is an internal IP only meaning that other pods can use a Services 
+Cluster IP to communicate between them but we can’t just put this IP address in our web 
+browser and expect to get connected to the service in our Kubernetes cluster.
+
+if we create this service this application still be accessed inside the k8s clusterIP
+
+case1:-
+if we create as a clusterIP service.
+The application should be accessed only for the people who have accessed to k*s
+cluster.
+there is a customer or user who is trying to access this application whoc is outside the organisation not possible
+
+NodePort
+========
+it will allow your application to be accessed inside your organisation.
+who ever access with the node IP address only they can access the application if we create service as nodeport mode.
+
+case2:-
+whenever we create a service of nodeport mode.nodeport mode will allow access for workernode1,workernode2,workernode3-> ec2,IP,VPC traffic
+access to pods
+
+Loadbalancer
+============
+it is basically your service wil export to the external world.
+if we deployed on the EKS kubernetes cluster if we are creating service of LOAD balancer type then we will get a elastic LB
+any where in the world -> public address
+
+Deploying Your First Nodejs
+Application on Kubernetes Cluster
+
+simple application step-up on k8s cluster
+step 1- minikube on local machine of AWS 
+step 2-create a docker image
+commands
+docker build --tag imagename
+step 3- push the docker image to docker hub
+
+docker login
+push the docker image to docker hub
+step 4-: Prepare Kubernetes Deployment and Service Files
+create the directory for node.js application
+inside the directory add the deployment.yaml and service.yaml
+step 5- deploy pods
+kubectl apply -f deployment.yml
+step 6 - deploy services
+kubectl aply -f service.yaml
+step 7 - validate the deployment
+kubectl get deployment
+step 8 - access the appilcation
+minikube service node-app-service 
+
+Use Cases for the Deployment Object
+● With the help of deployment, the replica set will be rolled out, which will deploy the
+pods and check the status in the background whether the rollout has succeeded or
+not.
+● If the pod template spec is modified then, the new replica set will be created with the
+new desired state and the old replica set will still exist and you can roll back
+according to the situation.
+● You can roll back to the previous deployment if the current state of the deployment is
+not stable.
+● You can scale up the deployment to manage the loads.
+● You can pause the deployment if you are fixing something in between the
+deployment and then resume it after fixing it.
+● You can clean up those replica sets which are older and no longer needed.
+
+another
+=======
+complete application deployment using K8s components
+
+mongobd pod in order to talk to that pod we need service(internal service)
+mongo express deployment(pod)-
+database URL of mongodb so that mongo express can connect to it
+credentials-DB user,DB pwd- so that athenticate
+
+deployment.yaml
+that why env variables is configured
+
+inside the deploy file
+configmap 
+DB url
+
+inside the deploy file
+secret
+DB user
+Db pwd
+
+external service
+URL
+ip address of the node
+port of external service
+
+request comes from the browser->external service of Mongo express-> mongo express pod-> pod wil connect to mongodb internalservice
+-> mongodb pod->it will authenticate using the credentials->secrets DB-user,db-pwd
+
+step1:- stepup minikube cluster
+kubectl get all
+
+in localhost
+we need to deploy mongodb manifest file
+
+step2
+mongo.yaml
+deplyment file
+image configuration of mongodb
+mongodb container is 27017
+environment variables
+
+step3 
+secrets.yaml
+secrets
+username: 
+pwd:
+
+values must be base64 encoded
+mongo-secret.yaml
+echo -n 'username' | base64
+copy that copy in to secret configuration for the root username
+
+echo -n 'password' | base64
+copy and paste in the password in the secret.yaml file
+
+
+we need to do configuration 
+cd k8s-configuration/
+ls
+mongo-secret.yaml mongo.yaml
+kubectl apply -f mongo-secret.yaml
+kubectl get secret
+we can refernece in the deployment file
+kubectl apply -f mongo.yaml
+kubectl get all
+i should see the 
+pod starting up
+replicasets
+deployments
+
+check 
+kubectl get pod
+kubectl get pod --watch (how time it is taking)
+kubectl describe pod  pod-name(we can also see any problem in the pod)
+
+kubectl get pods
+
+STEP2
+we create an internal service
+--- -> new document is starting
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port:27017
+      targetPort:27017
+
+kubectl apply -f mongo.yaml
+kubectl get service
+kubectl describe service service-name
+kubectl get pod -o wide
+kubectl get all | grep mongodb
+
+which data to connect?
+mongoDB address/internal service
+..MONGODB_SERVER
+
+which credentials to authenticate?
+...ADMINUSERNAME
+...ADMINPASSWORD
+
+config map
+
+apiVersion: v1
+kind: configmap
+metadata:
+   name: mongodb-configmap
+data:
+   database_url:
+
+kubectl apply -f mongo-configmap.yaml
+kubectl apply -f mongo-express.yaml
+kubectl get pod
+kubectl logs pod-name
+kubectl apply -f mongo-express.yaml
+kubectl get service
+minikube service (name-of-service) mongo-express-service
+
+ReplicationController
+=====================
+ReplicationController is an object in Kubernetes that was introduced in v1 of Kubernetes
+which helps to meet the desired state of the Kubernetes cluster from the current state.
+ReplicationController works on equality-based controllers only.
+
+Create the replication controller by running the command
+kubectl apply -f myrc.yml
+If you want to modify the replicas, you can do that by running the command
+kubectl scale --replicas=5 rc -l Location=India
+
+Now, if you want to delete all the pods. You can do it by just deleting the replicationController
+by the given command.
+kubectl delete -f myrc.yml
+
+Create the replicaSet by running the command
+kubectl apply -f myrs.yml
+
+If you want to increase or decrease the number of replicas, you can do it by the given
+command.
+kubectl scale --replicas=5 rs myrs
+
+If you want to delete all the pods, you can do it by deleting the replicaSet with the help of the
+given command.
+kubectl delete -f myrs.yml
+
+kubernetes Volumes
+==================
+EmptyDir
+
+● This is one of the basic volume types that we have discussed earlier in the facts.
+This volume is used to share the volumes between multiple containers within a pod
+instead of the host machine or any Master/Worker Node.
+● EmptyDir volume is created when the pod is created and it exists as long as a pod.
+● There is no data available in the EmptyDir volume type when it is created for the first.
+● Containers within the pod can access the other containers' data. However, the mount
+path can be different for each container.
+● If the Containers get crashed then, the data will still persist and can be accessible by
+other or newly created containers.
+
+Note:-
+I have created one file in container1 and looking for the same file and content
+from container2 which is possible.
+
+Hostpath
+========
+This volume type is the advanced version of the previous volume type EmptyDir.
+In EmptyDir, the data is stored in the volumes that reside inside the Pods only where
+the host machine doesn’t have the data of the pods and containers.
+71
+hostpath volume type helps to access the data of the pods or container volumes from
+the host machine.
+hostpath replicates the data of the volumes on the host machine and if you make the
+changes from the host machine then the changes will be reflected to the pods
+volumes(if attached).
+
+Note:-
+once the pod has been created the data directory is also created on the local
+machine(Minikube Cluster).
+
+creating a txt file inside the pod's mapped directory->which is
+mapped to the local directory->for the same file and
+content on the local machine directory
+
+Persistent Volume
+=================
+● Persistent Volume is an advanced version of EmptyDir and hostPath volume types.
+● Persistent Volume does not store the data over the local server. It stores the data on
+the cloud or some other place where the data is highly available.
+72
+● In previous volume types, if pods get deleted then the data will be deleted as well.
+But with the help of Persistent Volume, the data can be shared with other pods or
+other worker node’s pods as well after the deletion of pods.
+● One Persistent Volume is distributed across the entire Kubernetes Cluster. So that,
+any node or any node’s pod can access the data from the volume accordingly.
+● With the help of Persistent Volume, the data will be stored on a central location such
+as EBS, Azure Disks, etc.
+● Persistent Volumes are the available storage(remember for the next volume type).
+● If you want to use Persistent Volume, then you have to claim that volume with the
+help of the manifest YAML file.
+
+4. Persistent Volume Claim(PVC)
+===============================
+● To get the Persistent Volume, you have to claim the volume with the help of PVC.
+● When you create a PVC, Kubernetes finds the suitable PV to bind them together.
+● After a successful bound to the pod, you can mount it as a volume.
+● Once a user finishes its work, then the attached volume gets released and will be
+used for recycling such as new pod creation for future usage.
+● If the pod is terminating due to some issue, the PV will be released but as you know
+the new pod will be created quickly then the same PV will be attached to the newly
+created Pod.
+
+the Persistent Volume will be on Cloud.EBS because we are using AWS cloud for our K8
+learning.
+EBS Volumes keeps the data forever where the emptydir volume did not. If the pods
+get deleted then, the data will still exist in the EBS volume.
+● The nodes on which running pods must be on AWS Cloud only(EC2 Instances).
+● Both(EBS Volume & EC2 Instances) must be in the same region and availability
+zone.
+● EBS only supports a single EC2 instance mounting a volume
+
+Configmaps
+=========
+ConfigMap stores non-confidential data.
+ConfigMap is used to store the configuration data in key-value pairs within Kubernetes
+
+Secrets
+=======
+There are lot of confidential information that needs to be stored on the server such as
+database usernames, passwords, or API Keys
+To keep all the important data secure, Kubernetes has a Secrets feature that encrypts the data
+Secrets can store data up to 1MB which would be enough.
+Secrets are stored in the /tmps directory and can be accessible to pods only
+
+Jobs
+====
+a job is a controller object that creates one or more pods to perform a specific task and
+ensures that the task is completed successfully.
+Jobs are designed to run one or more pods to perform a task and then terminate when the task
+is completed.
+
+Use cases:
+● Database backup script needs to run
+● Running batch processes
+● Running the task on the scheduled interval
+● Log Rotation
+
+CronJobs:-
+=========
+It is used to run batch jobs like db-backup and log fetch. 
+Cron Job is mainly to schedule the tasks at specified time by using cron expressions.
+
+Namespaces
+==========
+● A namespace is a logical entity that is used to organize the Kubernetes Cluster into
+virtual sub-clusters.
+● The namespace is used when an organization shares the same Kubernetes cluster for
+multiple projects.
+● There can be any number of namespaces can be created inside the Kubernetes cluster.
+● Nodes and Kubernetes Volumes do not come under the namespaces and are visible to
+every namespace.
+
+When should we consider Kubernetes Namespaces?
+● Isolation: When there are multiple numbers of projects running then we can consider
+making namespaces and put the projects accordingly in the namespaces.
+● Organization: If there is only one Kubernetes Cluster which has different environments
+to keep isolated. If something happens to the particular environment then it won’t affect
+the other environments.
+● Permission: If some objects are confidential and must need access to the particular
+persons then, Kubernetes provides RBAC roles as well which we can use in the
+namespace. It means that only authorized users can access the objects within the
+namespaces.
+
+Kubernetes AutoScaling
+======================
+
+to run the application we need CPU and memory.
+Sometimes, there will be a chance where the CPU gets loaded, and this might fail the
+server or affect the application. Now, we can’t afford the downtime of the applications. To
+get rid of these, we need to increase the number of servers or increase the capacity of
+servers.
+
+Horizontal Pod AutoScaling: 
+--------------------------
+In this type of scaling, the number of servers will
+increase according to CPU utilization. In this, you define the minimum number of
+servers, maximum number of servers, and CPU utilization. If the CPU utilization
+crosses more than 50% then, it will add the one server automatically.
+
+Vertical Pod AutoScaling: 
+--------------------------
+In this type of scaling, the server will remain the same in
+numbers but the server’s configuration will increase such as from 4GB RAM to 8GM
+RAM, and the same with the other configurations. But this is not cost-effective and
+business-effective. So, we use Horizontal Pod AutoScaling.
+
+Ingress
+-------
+Kubernetes Ingress is like a cop for your applications that are running on your Kubernetes
+cluster. It redirects the incoming requests to the right services based on the Web URL or
+path in the address.
+
+Ingress provides the encryption feature and helps to balance the load of the applications
+
+Ingress is like a receptionist who provides the correct path for the hotel
+room to the visitor or person.
+
+Ingress helps to expose the HTTP and HTTPS routes from outside of the cluster.
+Ingress enables Path-based and Host-based routing.
+Ingress supports Load balancing and SSL termination.
+
+Path-based routing: Path-based routing directs traffic to the different services
+based on the path such as example.com/app1.
+Host-based routing: Host-based routing directs traffic to the different services
+based on the Website’s URL such as demo.example.com
+
+Use case-
+========
+1.defining multiple path of the same hosts so consider following use case.
+example
+google has one domain but many services
+you use analytics,shopping,calendar,gmail,youtube,drive etc
+allof them are separate application that are accessable with the same domain
+
+2.instead of using 2 URL to make different application accessable some company use subdomain
+http://myapp.com/analytics
+http://analytics.myapp.com
+instead of having one host and multiple path 
+you have now multiple hosts with one path. each host represent a subdomain
+
+Statefulset for stateful application
+====================================
+stateful applications
+=====================
+example of staeful application are databases example my SQL,elasticsearch,MongoDB
+(or) any application that stores data to keep track of its state
+
+Stateless application
+=====================
+dont keep record of state
+each request are handled is completely new.
+
+example
+=======
+NodeJs application that is connected to mongoDB when requests comes in NodeJs application(http) it doesnt depend on previous data to handle this incoming requests
+it can handle the request based on the payload that additionally need to update data in the database or query the data.
+
+when Nodejs forward requests to mongoDB. mongoDB will update the data based on previous state or query the data from its storage.
+
+storage requests it has to handle the data also depends on most up-to-date data/store
+Nodejs where data passthrough for data query/update.
+
+stateless application are deployed using deployment component.
+deployment is an abtraction of pods allows you to repplicate your application, run two or more identical pod on the same.
+in stateles application in the cluster.
+
+statefulset application are deployed using statefulset component.
+in just deployment, the statefulset makes it to replicate pods or run multiple replicas in-it
+
+deployment vs stateful
+replicating stateful application is more difficult and other requirements
+
+stateless application donot have
+
+example:- mysql database
+mysql database pod which handles requests from java app using deployed using deployment component
+if we scale the java application using 3 pods so that they can handle more client requests in  parallel we want to scale my-sql app
+we need add more java requests as well scaling your java application 
+->java application will replicate pods will identical and interchangable scale it using deployment easily
+->deployment will create the pods in any order or random order with random hashes
+->one service that load balances to any pod
+
+stateful
+mysql pod replicas cannt be created/deleted at same time
+cant be randomly addressed
+replica pods are not identical
+
+statefulset							deployment
+->statefulset are used for those applications that require      deployment donot provide the feature of stable hostname.        
+->stable network identity and hostnames.			that if pod created it will have random generated name.
+whenever pod is created it gets an unique name		
+->statefulset deploy the podds in sequential order		the multiple pods in replicas are created at one time.
+->each pod are created in reverse order      			deployment is aften stateless applications.so pods doesnot contain
+->statefulsets are used for those applications that require     data persistence.whenever a pod is replaced the data will be lost.
+data persistence such as databases.where volumes are attached   deployment works with service objects provides load balancing. 
+to pods.if any pod is resheduled or restarted it will have      it distributes the traffic between multiple pods to make the application
+all the data.							highly available.
+->statefulset are associated with the headless service that provide
+DNS for each pods hostnames.
+this will help to communicate with the specific pods	
+
+Daemonset
+=========
+
+A DaemonSet ensures that all (or some) Nodes run a copy of a Pod. 
+As nodes are added to the cluster, Pods are added to them
+
+UseCases
+
+1. Monitoring and Logging: 
+==========================
+With the help of DaemonSets, we can deploy monitoring
+agents or log collectors to gather the information on the node. Tools like Prometheus,
+beats, ElasticSearch, etc can be deployed using DaemonSets to ensure complete
+coverage across the cluster.
+
+2. Security Agents: 
+===================
+We can deploy Security Agents like intrusion detection systems
+(IDS) or anti-malware software on every node to protect the cluster from threats.
+
+3. Custom Network Policies:
+=========================== 
+We can deploy the custom network policies or firewall
+rules on each node to control communication and security at the node level.
+
+4. Operating System Updates:
+============================ 
+We can deploy the updates or patches at one time
+with the help of DaemonSets.
+
+5. Storage and Data Management: 
+===============================
+Ensuring that each node has access to particular
+storage resources, such as local storage or network-attached storage(NAS).
+DaemonSets can manage storage plugins or agents to provide consistent access.
+
+Example
+=======
+● Currently, I have three machines Only(1 Master + 2 Worker Nodes)
+● We will deploy the DaemonSet Pod on two Worker Nodes.
+● Once the Pods will be running on both Worker Nodes. We will create a new machine
+as Worker Node 3.
+● Worker Node3 will join the Kubernetes cluster.
+● The DaemonSet Pod will be running automatically without any intervention from our
+side.
+
+helm
+====
+
+Helm is a Kubernetes package manager in which the multiple numbers of YAML files such
+as the backend, and frontend come under one roof(helm) and deploy using helm.
+
+Example
+=======
+have an application where frontend, backend, and database code needs to
+deploy on Kubernetes.
+the task becomes hectic if you have to deploy frontend and backend codes because your application will be Stateful. 
+For frontend, backend, and database you will have to create different YAML files
+and deploy them too but it will be complicated to manage. 
+So, Helm is an open-source package manager that will help you to automate the deployment of applications for Kubernetes in the simplest way.
+
+Normal deployment
+=================
+To deploy your code you need to write a minimum of two YAML files which is deployment and service file. 
+Those files will be deployed with the help of the kubectl command. 
+These files act differently from each other but you know that the files are dependent on each other
+
+Helm deployment
+===============
+In the help deployment, all the YAML files related to the application deployment will be in the helm chart. 
+So, if you want to deploy your application you don’t need to deploy each YAML file one by one. 
+Instead, you can just write one command 
+helm install <your-chart-name> and it will deploy your entire application in one go. 
+Helm is the Package manager for the Kubernetes which helps to make the deployment simple.
+
+Benefits
+========
+● Because of the helm, the time will be saved.
+● It makes the automation more smoothly
+● Reduced complexity of deployments.
+● Once files can be implemented in different environments. You just need to change
+the values according to the environmental requirements.
+● Better scalability.
+● Perform rollback at any time.
+● Effective for applying security updates.
+● Increase the speed of deployments and many more.
