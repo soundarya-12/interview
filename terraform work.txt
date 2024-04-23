@@ -3,12 +3,14 @@ we are 5to 6 people. we have a github respository that host the terraform code a
 lets say we are using the terraform project to create EKS,VPC instead of storing the statefile in the 
 github respository itself we will use S3 bucket as remote backend
 
-if any person wants to update the EKS,VPC 3-tier artechitecture logic. they can simply clone the repository on there laptop. 
+if any person wants to update the EKS,VPC 3-tier artechitecture logic. 
+they can simply clone the repository on there laptop. 
 they can make the changes,they can verify the changes using terraform apply
 with this they will raise a pull request back in the github respository
 it will update in S3 logic
 once they raise pull request sommeone will approve
-then the new terraform will update with the source code. will the terraform file changes as will as the statefile is updated in the S3 bucket
+then the new terraform will update with the source code. 
+will the terraform file changes as will as the statefile is updated in the S3 bucket
 
 devloper team XYZ created app.py
 
