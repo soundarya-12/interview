@@ -76,6 +76,22 @@ This helps preserve data and configurations.
 Yes, Terraform has the capability to manage resources beyond AWS. 
 It supports multiple providers, making it versatile for managing various cloud and on-premises resources.
 
+What are Use Cases Of Terraform?
+Following are the some of the use cases of terraform.
+
+Provisioning Cloud Resources: Different types of cloud resources can be provisioned by using 
+terraform like AWS,GCP, and others. The resources can be managed are compute, storage, networking, and application services.
+
+Multi-Cloud Management: You can manage the infrastructure of different cloud platform at a 
+time which will helps you to maintain the multi-cloud or hybrid cloud environments.
+
+Infrastructure Versioning and Collaboration: You can store the scripts which have been written to 
+provision the infrastructure in the version control system like git form where other teams 
+can collaborate on infrastructure changes, track revisions, and roll back to previous states if needed.
+
+Automation and Continuous Integration/Continuous Deployment (CI/CD): You can also integrate the terraform 
+into you CI/CD pipelines where ever the build is triggered if there is any changes the infrastructure will upgrades automatically.
+
 IAC-> infrastruction as code. this is a process of managing or creating the infrastructure using code. not by the manual process.
 terraform is popular IAC
 it is one single code which is used to automate the entire infrastructure cloud,because it details with with APIs terraform will use to automate the infrastructure.
@@ -88,8 +104,9 @@ modules is nothing but logical grouping of resources
 what is statefile in terraform
 -----------------------------
 it keeps a track of resources that terraform is managing.
-whatever the resources that we have created in terraform is actually stored in the state file so that the terraform knows that this s a resources that is managing
-and if someone tries to delete or someone tries to create something new. terraform trying to notify someone is trying to create or delete it that is the purpose of statefile.
+whatever the resources that we have created in terraform is actually stored in the state file so that the 
+terraform knows that this s a resources that is managing and if someone tries to delete or someone 
+tries to create something new. terraform trying to notify someone is trying to create or delete it that is the purpose of statefile.
 
 the most common terraform CLI commands that you use everyday is:-
 ---------------------------------------------------------------
@@ -100,8 +117,8 @@ terraform apply
 terraform refresh
 
 what is terraform backend
-terraform is nothing but where terraform stores its state file. where-ever we are keeping your track of statefile,where-ever you are storing the statefile,that
- will become the terraform backend
+terraform is nothing but where terraform stores its state file. where-ever we are keeping 
+your track of statefile,where-ever you are storing the statefile,that will become the terraform backend
 
 what is terrafrom remote backend?
 this is used to lock the backend when other user wants to use the terraform file which helps in avoiding the conflicts between the two user 
