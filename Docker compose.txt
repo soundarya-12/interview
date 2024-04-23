@@ -1,0 +1,362 @@
+Docker is a containerization platform
+
+container
+=========
+container are light weight,standalone and executable software packages, 
+that is the a piece of software is code, runtime,libraries, system tools
+
+What is a Dockerfile?
+Dockerfile is a text file that contains a set of instruction
+for building a docker image
+
+How Docker Works
+
+Docker makes use of a client-server architecture.
+The Docker client talks with the docker daemon which helps in building, running, and distributing the docker containers
+Docker client runs with the daemon on the same system or we can connect the Docker client with the Docker daemon remotely. With the help of REST API over a  UNIX socket or a network, the docker client and daemon interact with each other. 
+
+Docker Daemon
+=============
+Docker daemon manages all the services by communicating with other daemons. 
+It manages docker objects such as images, containers, networks, and volumes with the help of the API requests of Docker
+
+Docker Client
+=============
+the docker client, the docker users can interact with the docker. 
+The docker command uses the Docker API.
+the docker client is to provide a way to direct the pull of images from the docker registry and run them on the docker host. The common commands which are used by clients are docker build, docker pull, and docker run
+
+Docker Host
+A Docker host is a type of machine that is responsible for running more than one container. It comprises the Docker daemon, Images, Containers, Networks, and Storage.
+
+Docker Registry
+===============
+All the docker images are stored in the docker registry.
+There is a public registry which is known as a docker hub that can be used by anyone.
+
+Docker Images
+=============
+it is a read-only template which is used to create docker comntainer
+An image contains instructions for creating a docker container. 
+It is just a read-only template. It is used to store and ship applications.
+
+Docker Containers
+=================
+Containers are created from docker images as they are ready applications.
+
+docker compose used for
+======================
+docker compose is a tool to define and manage multi-containers.
+docker applications using YAML file.
+
+docker inspect
+==============
+containerID or name provides detailed information about a container
+
+docker registry
+==============
+it is a service whuch is used to store and distribute the docker images
+
+docker hub
+==========
+it is a cloud based registry service provided by docker for sharing and distributing docker images
+
+docker container prune
+======================
+it is used to remove all the stop container
+
+Docker Run command
+The docker run command is a combination of the docker create and docker start commands
+
+Docker Pull
+This command allows you to pull any image which is present in the official registry of docker, Docker hub.
+
+Docker Stop
+This command allows you to stop a container if it has crashed or you want to switch to another one.
+
+Docker rm
+to delete a container
+
+Docker RMI
+To delete the image in docker
+
+Docker Images
+Lists all the pulled images which are present in our system.
+
+Docker exec
+This command allows us to run new commands in a running container
+
+This command only works until the container is running, after the container restarts, this command does not restart.
+
+Docker Login
+The Docker login command will help you to authenticate with the Docker hub by which you can push and pull your images.
+
+Docker Push
+Once you build your own customized image by using Dockerfile you need to store the image in the remote registry 
+which is DockerHub for that you need to push your image by using the following command
+
+Docker Build
+The docker build command is used to build the docker images with the help of Dockerfile.
+
+Docker Stop
+You can stop and start the docker containers where you can do the maintenance for containers.
+
+Docker Restart
+While running the containers in Docker you may face some errors and containers fails to start.
+
+What Is The Difference Between A Docker And A Virtual Machine(VM)?
+The following are the main differences between a Docker and a VM:
+
+Aspect
+
+			Docker							Virtual Machine ( VM )
+
+Isolation               Docker comes with light weight platform, 
+			It uses containerization for Isolation environments Virtual Machines comes with heavy software provides full virtualization for Complete OS Isolation.
+
+Resources Usage         It consumes less resources from Host OS kernel and use them more efficiently
+
+									VM are less efficient in using of resources effectively, each VM uses it own OS kernel and consumes more resources.
+
+Start Time
+
+			These are faster in setting up the OS platforms( containers), typically in seconds.
+
+									These are slower in startup time often requires minutes to setup the Instances.
+
+Scalability
+
+			Scaling of containers in docker is easy , it comes with less footprints.
+
+									It will be resource intensive when scaling of instances.
+
+Portability
+
+			Docker provides containerized applications that are high portable, consistent across different environments.
+
+									These are also portable but it will be heavier due to its encapsulation of the entire OS.
+
+Use Case
+
+			It will be effective for microservices, lightweight applications and containerized environments.
+
+									It suitable for running multiple applications in different environments.
+
+Dangling Images
+Dangling Images are those that don’t map to either the repository or the tag
+
+SNo.	Virtual Machines(VM)											Containers
+1	VM is a piece of software that allows you to install other software inside of it 
+	so you control it virtually as opposed to installing the software directly on the computer.	While a container is software that allows different functionalities 
+													of an application independently.
+
+2.	Applications running on a VM system, or hypervisor, can run different OS.			While applications running in a container environment share a single OS.
+3.	VM virtualizes the computer system, meaning its hardware.					While containers virtualize the operating system, or the software only.
+4.	VM size is very large, generally in gigabytes.	
+	While the size of the container is very light, 							generally a few hundred megabytes, though it may vary as per use.
+5.	VM takes longer to run than containers, the exact time depending on the underlying hardware.	While containers take far less time to run.
+6.	VM uses a lot of system memory.									While containers require very less memory.
+7.	VM is more secure, as the underlying hardware isn’t shared between processes.			While containers are less secure, as the virtualization is software-based, 
+													and memory is shared.
+8.	VMs are useful when we require all of the OS resources to run various applications.		While containers are useful when we are required to maximize 
+													the running applications using minimal servers.
+9.	Examples of Type 1 hypervisors are KVM, Xen, and VMware. Virtualbox is a Type 2 hypervisor	Examples of containers are RancherOS, PhotonOS, and Containers by Docker.
+
+
+Difference between Docker Images and Containers
+Docker Image								Docker Container
+It is a blueprint of the Container.					It is an instance of the Image.
+Image is a logical entity.						The container is a real-world entity.
+Images are created only once.						Containers are created any number of times using an image.
+Images are immutable. One cannot attach volumes and networks.		Containers change only if the old image is deleted and a new one is 
+									used to build the container. One can attach volumes, networks, etc.
+Images do not require computing resources to work.			Containers require computing resources to run as 
+									they run with a Docker Virtual Machine.
+To make a docker image, you have to write a script in a Dockerfile.	To make a container from an image, you have to run 
+									the “docker run <image>” command
+Docker Images are used to package up applications 
+and pre-configured server environments.					Containers use server information and a file system 
+									provided by an image in order to operate.
+Images can be shared on Docker Hub.					It makes no sense in sharing a running entity, 
+									always docker images are shared.
+There is no such thing as a running state of a Docker Image.		Containers use RAM when created and in a running state.
+An image must not refer to any state to remove the image.		A container must be in a running state to remove it.
+One cannot connect to the images as these images are like snapshots.	In this, one cannot connect them and execute the commands.
+Sharing of Docker Images is possible.					Sharing of containers is not possible directly.
+It has multiple read-only layers.					It has a single writable layer.
+These image templates can exist in isolation.				These containers cannot exist without images.
+
+Difference between Docker Container and VM Image
+Docker Container							VM Image
+Docker Container can be started within seconds.				The VM image will take minutes to start.
+Docker container resource usage is very less. 				The  VM image is very intense.
+The isolation is at the OS level. 					The isolation is at the process level. 
+Docker container manages the dependencies 
+are managed in the application level. 	 				VM image manages the dependencies at the system level. 
+
+docker images: Docker images will list all the images which are pulled or build in that docker host.
+docker pull: Docker pull will the docker images from the dockerhub.
+docker run: Docker run will run the docker image as an container.
+docker ps: Docker run will list all the containers which are running in the docker host.
+docker stop: Docker stop will stop the docker container which are already running.
+docker rm: Docker rm command will remove the containers which are in the stop condition
+
+Docker Image Command
+docker build command: It will build Docker images by using the Dockerfile.
+docker pull command: Docker pull command will pull the Docker image whcih is avalible in the dockerhub.
+docker images command: It will list all the images which are pulled and build in the docker host.
+docker inspect command: It will helps to debug the docker image if any errors occurred while building an image or pulling the image.
+docker push command: Docker command will push the docker image into the Dockerhub.
+docker save command: It will save the docker image in the form of dockerfile.
+docker rmi command: It will remove the docker image.
+Docker Container Command
+docker attach command: Connecting to an Existing Container.
+docker ps command: To list the running containers.
+docker container inspect infinite Command: To Inspect the Docker containers.
+docker exec command: To execute the commands in the running containers.
+docker cp command: To copy the file from docker host to the docker containers,
+
+1. What is docker-compose?
+
+Docker Compose is a tool for defining and running multi-container applications. 
+It is the key to unlocking a streamlined and efficient development and deployment experience.
+
+for each application we should separate 
+each container have one application. nginx having nginx, httpd having httpd
+it is not recommended to install multiple applications inside a single containers.
+multiple containers at a time.
+
+2. What is docker swarm?
+
+Docker Swarm is a clustering and scheduling/orchestration tool for Docker containers. 
+With Swarm, IT administrators and developers can establish and manage a cluster of Docker nodes as a single virtual system. 
+Swarm mode also exists natively for Docker Engine, the layer between the OS and container images.
+
+7. Diff between CMD and RUN
+cmd
+execute the command during the startup of the container/runtime of the container.
+it can be overridden during the runtime of the container creation.
+
+run 
+execute the command during the image build
+
+Entry-point
+execute the command during the startup of the container/runtime of the container.
+cannot override for the starting container
+
+copy
+copy file from build context into the image
+
+add
+download files from URLs and extract archieves
+
+ARG
+ARG defines build-time variables that can be used within the Dockerfile.
+
+ENV The ENV instruction is used to set environment variables in the image.
+
+15. Explain some commands of docker volume.
+
+create: 	It is used to create new volumes.
+ls: 		It is used to list all the volumes in a namespace.
+inspect: 	It is used to know more about any of the volumes.
+rm: 		It is used to remove any volume if it is no longer required.
+prune: 		It is used to remove all unused volumes.
+
+FROM – FROM is used to specify the base image to be used by the application/container. 
+LABEL – This instruction is used to provide metadata to an image.
+ENV – To set environment variables in a Docker container, ENV is used. You can have multiple variables in a single Dockerfile.
+ARG – It defines build-time variables that users can pass at build-time to the builder with the docker build command.
+WORKDIR – It sets the working directory for the instructions that follow.
+RUN – Used to run a Linux command and install packages into containers, create folders, etc.
+COPY – This copies files and directories from the host machine to the container.
+ADD – It copies files and directories to the container from the host machine as well as from the URL location. It can also unpack compressed files.
+VOLUME – It creates a directory mount point to access and store persistent data.
+EXPOSE – It is used to expose ports on the containers, and it informs Docker that the container listens on the exposed network ports at runtime.
+ENTRYPOINT – It provides a command and arguments for an executing container. If the user specifies any arguments or 
+commands at the end of the “docker run” command, the specified command overrides the default in CMD instruction.
+CMD – It provides defaults for executing containers and there can be only one CMD. It is used to set a command to be executed when running a container.
+
+21. Dockerize the python flask application.
+
+FROM python:3.7-alpine
+RUN mkdir /app
+WORKDIR /app
+ADD requirements.txt /app
+ADD main.py /app
+RUN pip3 install -r requirements.txt
+CMD ["gunicorn", "-w 4", "-b", "0.0.0.0:8000", "main:app"]
+
+22. Dockerize the nodejs application
+
+# Create image based on the official Node image from dockerhub
+FROM node:lts-buster
+ 
+# Create app directory
+WORKDIR /usr/src/app
+ 
+# Copy dependency definitions
+COPY package.json ./package.json
+COPY package-lock.json ./package-lock.json
+ 
+# Install dependencies
+#RUN npm set progress=false \
+#    && npm config set depth 0 \
+#    && npm i install
+RUN npm ci
+ 
+# Get all the code needed to run the app
+COPY . .
+ 
+# Expose the port the app runs in
+EXPOSE 3000
+ 
+# Serve the app
+CMD ["npm", "start"]
+
+23  dockerize the spring boot application
+
+FROM openjdk:8-jdk-alpine
+MAINTAINER baeldung.com
+COPY target/docker-message-server-1.0.0.jar message-server-1.0.0.jar
+ENTRYPOINT ["java","-jar","/message-server-1.0.0.jar"]
+Copy
+This file contains the following information:
+
+FROM: As the base for our image, we’ll take the Java-enabled Alpine Linux created in the previous section.
+MAINTAINER: The maintainer of the image.
+COPY: We let Docker copy our jar file into the image.
+ENTRYPOINT: This will be the executable to start when the container is booting. 
+We must define them as JSON-Array because we’ll use an ENTRYPOINT in combination with a CMD for some application arguments.
+To create an image from our Dockerfile, we have to run ‘docker build’ like before:
+
+24 dockerize the java web application
+
+# Pull base image.
+FROM ubuntu:latest
+
+RUN \
+# Update
+apt-get update -y && \
+# Install Java
+apt-get install default-jre -y
+
+ADD ./target/gs-serving-web-content-0.1.0.jar spring-mvc-example.jar
+
+EXPOSE 8080
+
+CMD java -jar spring-mvc-example.jar
+
+docker container exec- run a command in a running container
+
+docker container cp- copyies files and folder btw a container and local
+
+docker container diff- inspect changes files or directories on a containers filesystem
+
+docker container export -export a container filesytem as tar archive
+
+docker container inspect-detail info of one or more containers
+
+docker container prune-remove all stoped containers
+
+docker container kill-kill running container
