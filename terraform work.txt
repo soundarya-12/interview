@@ -1,8 +1,10 @@
 Workflow
 we are 5to 6 people. we have a github respository that host the terraform code and tat code will have AWS resource logic
-lets say we are using the terraform project to create EKS,VPC instead of storing the statefile in the github respository itself we will use S3 bucket as remote backend
+lets say we are using the terraform project to create EKS,VPC instead of storing the statefile in the 
+github respository itself we will use S3 bucket as remote backend
 
-if any person wants to update the EKS,VPC 3-tier artechitecture logic. they can simply clone the repository on there laptop. they can make the changes,they can verify the changes using terraform apply
+if any person wants to update the EKS,VPC 3-tier artechitecture logic. they can simply clone the repository on there laptop. 
+they can make the changes,they can verify the changes using terraform apply
 with this they will raise a pull request back in the github respository
 it will update in S3 logic
 once they raise pull request sommeone will approve
@@ -27,18 +29,22 @@ at the time of creation of EC2 instance i have copied the file + i have execute 
 we can use provision at the time of creation and also in the time of destruction
 
 using terraform, we have created EC2 with all the required configuration with vpc,routetable etc but
-we are not able install python if we dont use provisioner. we have create all the required configuration using ansible,shellscript to connect to the instances
+we are not able install python if we dont use provisioner. 
+we have create all the required configuration using ansible,shellscript to connect to the instances
 
-remote exec provisioner-at the time of crating EC2 instance you can connect to that particular instance or resource-> we can execute any kind of commands(can be installing python,nodejs,java)
+remote exec provisioner-at the time of crating EC2 instance you can connect to that 
+particular instance or resource-> we can execute any kind of commands(can be installing python,nodejs,java)
  
 local exec provisioner
 print anything on the console(particular Ec2 is created)
-if terraforms has 10,000 file in the console, in the local exec we can ask terraform to copy all the output to a particular file.
+if terraforms has 10,000 file in the console, in the local exec we 
+can ask terraform to copy all the output to a particular file.
 
 day-6
  
 what is public IAAS platforms
-a cloud computing model that provides on-demand access to computing resources such as servers, storage, networking, and virtualization.
+a cloud computing model that provides on-demand access to computing resources 
+such as servers, storage, networking, and virtualization.
 
 types of application deloyments - bluegreen, canary
 
