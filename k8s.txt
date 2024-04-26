@@ -1,3 +1,19 @@
+Features				       Kubernetes				                                         Docker
+Containerization	  Allows to run and manage containers			                 Allows to create and manage containers
+
+Orchestration		    Allows to manage and automate container 	             	Does not have native orchestration features.
+			                deployment and scaling across clusters of hosts	       It relies on third-party tools like Docker Swarm
+
+Scaling		         	Allows for horizontal scaling of containers	     	     Allows for horizontal scaling of containers
+
+Self-healing		    Automatically replaces failed containers with new ones	 Does not have native self-healing capabilities. 
+									                                                           	     It relies on third-party tools like Docker Compose or Docker Swarm
+
+Load balancing		  Provides internal load balancing		                       Does not have native load balancing capabilities. 
+									                                                                	It relies on third-party tools like Docker Swarm
+Storage orchestration	Provides a framework for storage orchestration 		   Does not have native storage orchestration capabilities
+			                   across clusters of hosts				                        It relies on third-party tools like Flocker
+
 Kubernetes is a container orchestration tool, it helps to automate the deployment, scaling
 and managing the containerised applications.
 
