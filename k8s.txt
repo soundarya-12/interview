@@ -14,8 +14,7 @@ Load balancing		Provides internal load balancing			Does not have native load bal
 
 Storage orchestration	Provides a framework for storage orchestration 		Does not have native storage orchestration capabilities
 			across clusters of hosts				It relies on third-party tools like Flocker
-			                        It relies on third-party tools like Flocker
-
+			                      
 Kubernetes is a container orchestration tool, it helps to automate the deployment, scaling
 and managing the containerised applications.
 
