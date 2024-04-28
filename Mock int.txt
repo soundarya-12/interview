@@ -1,0 +1,307 @@
+what is the difference between git pull and git fetch?
+git fetch
+=========
+git fetch` downloads/retrieves updates from a remote repository to 
+your local repository without integrating them
+
+git pull
+========
+`git pull` not only fetches the updates but also 
+incorporates them into your active branch.
+updates the current branch with the latest changes from the remote branch
+fetch + merge
+
+what is git cherry-pick?
+`git cherry-pick` is used to apply the changes 
+introduced by some commits from one branch onto another branch.
+
+what is the difference git merge and git rebase?
+`git merge` 
+==========
+integrates changes from one branch to another, 
+preserving the history of both branches.
+Use `merge` to preserve the history of a feature branch
+
+`git rebase`
+===========
+`git rebase` rewrites the history by placing commits 
+from one branch onto another, creating a linear history.
+`rebase` to clean up the commit history before merging.
+(or)
+rebase the current head onto the specified branch
+rewrites the commit history by placing from one branch onto another branch, creating a linear history
+
+
+what is the difference between git clone and git pull?
+
+git clone
+=========
+Use `git clone <repository-url>` to make a copy of the 
+target repository on your local machine.
+
+git pull
+========
+`git pull` not only fetches the updates but also 
+incorporates them into your active branch.
+
+what is the difference between docker and kubernetes?
+kubernetes				docker
+complex installation			easier installation
+more complex with a step learning curve	lightweight and easier to learn,but limites
+but more powerful			functionality
+supports auto-scaling			manual scaling
+built-in monitoring			needs third-party tools for monitoring
+manual setup of load balancer		auto load balancer
+need for separate CLI Tool		integrated with docker CLI
+
+
+Features				Kubernetes				Docker
+Containerization	Allows to run and manage containers			Allows to create and manage containers
+
+Orchestration		Allows to manage and automate container 		Does not have native orchestration features.
+			deployment and scaling across clusters of hosts		It relies on third-party tools like Docker Swarm
+
+Scaling			Allows for horizontal scaling of containers		Allows for horizontal scaling of containers
+
+Self-healing		Automatically replaces failed containers with new ones	Does not have native self-healing capabilities. 
+										It relies on third-party tools like Docker Compose or Docker Swarm
+
+Load balancing		Provides internal load balancing			Does not have native load balancing capabilities. 
+										It relies on third-party tools like Docker Swarm
+
+Storage orchestration	Provides a framework for storage orchestration 		Does not have native storage orchestration capabilities
+			across clusters of hosts				It relies on third-party tools like Flocker
+
+
+what is docker compose used for?
+
+Docker Compose is a tool you can use to define and share multi-container applications
+
+what is the difference between CMD and entrypoint?
+
+Cmd
+execute the command during the startup of the container/runtime of the container.
+it can be overridden during the runtime of the container creation.
+
+Entry-point
+execute the command during the startup of the container/runtime of the container.
+cannot override for the starting container
+
+what is the difference between ADD and COPY?
+
+copy
+copy file from build context into the image
+
+add
+download files from URLs and extract archieves
+
+what is the difference between vm and container?
+
+Virtual Machines(VM)											Containers
+1	VM is a piece of software that allows you to install other software inside of it 
+	so you control it virtually as opposed to installing the software directly on the computer.	While a container is software that allows different functionalities 
+													of an application independently.
+
+2.	Applications running on a VM system, or hypervisor, can run different OS.			While applications running in a container environment share a single OS.
+3.	VM virtualizes the computer system, meaning its hardware.					While containers virtualize the operating system, or the software only.
+4.	VM size is very large, generally in gigabytes.	
+	While the size of the container is very light, 							generally a few hundred megabytes, though it may vary as per use.
+5.	VM takes longer to run than containers, the exact time depending on the underlying hardware.	While containers take far less time to run.
+6.	VM uses a lot of system memory.									While containers require very less memory.
+7.	VM is more secure, as the underlying hardware isn’t shared between processes.			While containers are less secure, as the virtualization is software-based, 
+													and memory is shared.
+8.	VMs are useful when we require all of the OS resources to run various applications.		While containers are useful when we are required to maximize 
+													the running applications using minimal servers.
+9.	Examples of Type 1 hypervisors are KVM, Xen, and VMware. Virtualbox is a Type 2 hypervisor	Examples of containers are RancherOS, PhotonOS, and Containers by Docker.
+
+Virtualization							Containerization
+More secure and fully isolated.					Less secure and isolated at the process level.
+Heavyweight,                                                    Lightweight,  
+high resource usage.						less resource usage.
+Hardware-level virtualization.					Operating system virtualization.
+Each virtual machine runs in
+its own operating system.					All containers share the host
+								operating system.
+Startup time in minutes and slow provisioning.			Startup time in milliseconds and quicker provisioning.
+
+Tell some 5 docker commands used in daily life.
+
+what is ansible?
+================
+Ansible is an open-source automation tool developed by Redhat that is meant for 
+simplifying the configuration management, application deployment, and automation of tasks.
+It allows us in automating repetitive tasks, ensuring consistency and efficiency 
+in managing servers and networks using SSH protocol for make communication with the network Agentlessly.
+
+what is ansible vault?
+======================
+Ansible Vault is a tool for encrypting sensitive data in Ansible playbooks, 
+providing secure storage through usage of secrets such as passwords or API keys.
+Ansible vault is used to keep sensitive data such as passwords instead of placing it as plaintext in playbooks or roles. 
+Any structured data file or any single value inside the YAML file can be encrypted by Ansible. 
+To encrypt a file
+ansible-vault encrypt foo.yml bar.yml baz.yml
+to decrypt a file
+ansible-vault decrypt foo.yml bar.yml baz.yml
+
+what is role in ansible?
+========================
+An Ansible Role is a self-contained, portable unit of Ansible automation that serves as 
+the preferred method for grouping related tasks and associated variables, files, handlers, 
+and other assets in a known file structure. While automation tasks can be written exclusively in an Ansible Playbook, 
+Ansible Roles allow you to create bundles of automation content that can be run in 1 or more plays, 
+reused across playbooks, and shared with other users in collections.
+
+Ansible Roles are expressed in YAML—a human-readable data serialization language used to write configuration files. 
+When a role is included in a task or a play, Ansible looks for a main.yml file in at least 1 of 8 standard role directories. 
+These directories—depicted below with explanatory comments—include role tasks, handlers, modules, defaults, variables, files, 
+templates, and meta.
+
+roles/
+    common/               # this hierarchy represents a "role"
+        tasks/            #
+            main.yml      #  <-- tasks file can include smaller files if warranted
+        handlers/         #
+            main.yml      #  <-- handlers file
+        templates/        #  <-- files for use with the template resource
+            ntp.conf.j2   #  <------- templates end in .j2
+        files/            #
+            bar.txt       #  <-- files for use with the copy resource
+            foo.sh        #  <-- script files for use with the script resource
+        vars/             #
+            main.yml      #  <-- variables associated with this role
+        defaults/         #
+            main.yml      #  <-- default lower priority variables for this role
+        meta/             #
+            main.yml      #  <-- role dependencies
+        library/          # roles can also include custom modules
+        module_utils/     # roles can also include custom module_utils
+        lookup_plugins/   # or other types of plugins, like lookup in this case
+
+    webtier/              # same kind of structure as "common" was above, done for the webtier role
+    monitoring/           # ""
+    fooapp/               # ""
+
+Explain k8s architecture.
+Kubernetes is clustered architecture, which consists of master and worker
+Here master is called as control-plane and worker is called as nodes
+
+Components of control-plane:
+
+Apiserver:
+It is the main communication point of the control-plane and it exposes externally.
+
+Scheduler:
+Once the API Server gathers the information from the Controller Manager, the API Server
+notifies the Scheduler to perform the respective task such as increasing the number of pods,
+etc. After getting notified, the Scheduler takes action on the provided work.
+
+Etcd:
+Etcd is like a database that stores all the pieces of information of the cluster such as Pods IP,
+Nodes, networking configs, etc. Etcd stored data in key-value pairs. The data comes from the
+API Server to store in etc.
+
+Controller Manager:
+The controller Manager collects the data/information from the API Server of the Kubernetes
+cluster like the desired state of the cluster and then decides what to do by sending the
+instructions to the API Server.
+
+Components of nodes:
+
+Kubelet:
+It ensures that the pod is always running, if not it will communicate with the control-plane with
+the help of apiserver makes the pod to running state.
+
+Kube-proxy:
+kube-proxy contains all the network configuration of the entire cluster such as pod IP, etc. It is
+responsible for networking, it takes care of load balancing and routing.
+
+Container-runtime:
+It is responsible for running containers
+
+what are the types of k8s services?
+
+clusterIP
+nodeport
+load balancing
+externalname
+
+what is daemonset?
+A DaemonSet ensures that all (or some) Nodes run a copy of a Pod. 
+As nodes are added to the cluster, Pods are added to them
+
+UseCases
+========
+1. Monitoring and Logging: 
+--------------------------
+With the help of DaemonSets, we can deploy monitoring
+agents or log collectors to gather the information on the node. 
+Tools like Prometheus, beats, ElasticSearch, etc can be deployed using DaemonSets to ensure complete
+coverage across the cluster.
+
+2. Security Agents: 
+-------------------
+We can deploy Security Agents like intrusion detection systems(IDS) or 
+anti-malware software on every node to protect the cluster from threats.
+
+3. Custom Network Policies: 
+---------------------------
+We can deploy the custom network policies or firewall
+rules on each node to control communication and security at the node level.
+
+4. Operating System Updates: 
+----------------------------
+We can deploy the updates or patches at one time
+with the help of DaemonSets.
+
+5. Storage and Data Management: 
+-------------------------------
+Ensuring that each node has access to particular
+storage resources, such as local storage or network-attached storage(NAS).
+DaemonSets can manage storage plugins or agents to provide consistent access.
+
+what is the difference between deployment and statefulset?
+
+statefulset							deployment
+->statefulset are used for those applications that require      deployment donot provide the feature of stable hostname.        
+stable network identity and hostnames.				
+->whenever pod is created it gets an unique name		that if pod created it will have random generated name.
+->statefulset deploy the podds in sequential order		the multiple pods in replicas are created at one time.
+->each pod are created in reverse order      			deployment is aften stateless applications.so pods doesnot contain
+->statefulsets are used for those applications that require     data persistence.whenever a pod is replaced the data will be lost.
+data persistence such as databases.where volumes are attached   deployment works with service objects provides load balancing. 
+to pods.if any pod is resheduled or restarted it will have      it distributes the traffic between multiple pods to make the application
+all the data.							highly available.
+->statefulset are associated with the headless service that provide
+DNS for each pods hostnames.
+this will help to communicate with the specific pods	
+
+what is pv,pvc and storage class?
+
+PersistentVolume:
+================
+Persistent Volume does not store the data over the local server. 
+It stores the data on the cloud or some other place where the data is highly available.
+In previous volume types, if pods get deleted then the data will be deleted as well. 
+But with the help of Persistent Volume, the data can be shared with other pods or other worker node’s pods
+as well after the deletion of pods.
+If you want to use Persistent Volume, then you have to claim that volume with the help of the
+manifest YAML file.
+
+PersistentVolumeClaim:
+=====================
+To get the Persistent Volume, you have to claim the volume with the help of PVC.
+When you create a PVC, Kubernetes finds the suitable PV to bind them together.
+After a successful bound to the pod, you can mount it as a volume.
+● Once a user finishes its work, then the attached volume gets released and will be
+used for recycling such as new pod creation for future usage.
+● If the pod is terminating due to some issue, the PV will be released but as you know
+the new pod will be created quickly then the same PV will be attached to the newly
+created Pod.
+
+Storage class
+=============
+A StorageClass provides a way for administrators to describe the classes of storage they offer. 
+Different classes might map to quality-of-service levels, 
+or to backup policies, or to arbitrary policies determined by the cluster administrators. 
+Kubernetes itself is unopinionated about what classes represent.
