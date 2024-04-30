@@ -2,16 +2,19 @@
 Amazon Elastic Kubernetes Service (Amazon EKS) is a fully managed Kubernetes service that makes it easier to deploy, manage, and scale containerized applications using Kubernetes.
 
 ### 2. How does Amazon EKS work?
-Amazon EKS eliminates the need to install, operate, and maintain your own Kubernetes control plane. It provides a managed environment for deploying, managing, and scaling containerized applications using Kubernetes.
+Amazon EKS eliminates the need to install, operate, and maintain your own Kubernetes control plane. 
+It provides a managed environment for deploying, managing, and scaling containerized applications using Kubernetes.
 
 ### 3. What is Kubernetes?
 Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications.
 
 ### 4. What are the key features of Amazon EKS?
-Key features of Amazon EKS include automatic upgrades, integration with AWS services, high availability with multiple availability zones, security with IAM and VPC, and simplified Kubernetes operations.
+Key features of Amazon EKS include automatic upgrades, integration with AWS services, high availability with multiple 
+availability zones, security with IAM and VPC, and simplified Kubernetes operations.
 
 ### 5. What is a Kubernetes cluster?
-A Kubernetes cluster is a collection of nodes (Amazon EC2 instances) that run containerized applications managed by Kubernetes. It includes a control plane and worker nodes.
+A Kubernetes cluster is a collection of nodes (Amazon EC2 instances) that run containerized applications managed by Kubernetes. 
+It includes a control plane and worker nodes.
 
 ### 6. How do you create a Kubernetes cluster in Amazon EKS?
 To create an EKS cluster, you use the AWS Management Console, AWS CLI, or AWS CloudFormation. 
