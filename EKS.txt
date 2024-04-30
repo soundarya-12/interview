@@ -69,3 +69,19 @@ These tools help manage the lifecycle of containerized applications.
 ### 20. How does Amazon EKS handle high availability?
 Amazon EKS supports high availability by distributing control plane components across multiple availability zones. 
 It also offers features like managed node groups and Auto Scaling for worker nodes.
+
+
+statefulset							deployment
+->statefulset are used for those applications that require      deployment donot provide the feature of stable hostname.        
+stable network identity and hostnames.				
+->whenever pod is created it gets an unique name		that if pod created it will have random generated name.
+->statefulset deploy the podds in sequential order		the multiple pods in replicas are created at one time.
+->each pod are created in reverse order      			deployment is aften stateless applications.so pods doesnot contain
+->statefulsets are used for those applications that require     data persistence.whenever a pod is replaced the data will be lost.
+data persistence such as databases.where volumes are attached   deployment works with service objects provides load balancing. 
+to pods.if any pod is resheduled or restarted it will have      it distributes the traffic between multiple pods to make the application
+all the data.							highly available.
+->statefulset are associated with the headless service that provide
+DNS for each pods hostnames.
+this will help to communicate with the specific pods	
+
