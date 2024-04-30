@@ -1,0 +1,38 @@
+vpc id
+
+create an Ec2 instance in terraform
+one vpc
+one public subnet
+one private subnet
+internet gateway
+
+Aws custom VPC region
+
+1.select the region
+2.create VPC
+3.enable DNS host name in the VPC
+4.create internet gateway
+5.attach internet gateway to vpc
+6.create public subnets
+7.enable auto assign public IP setting
+8.create public route table
+9.add public route to the public route table
+10.assocaite the public subnet with the public route table
+11.create the private subnets
+12.create NAT gateway in public subnet
+13.create an EIP and assocaite it to the NAT gateways
+14.create private route table
+15.add public route to the private route table
+16.associate private subnets with private route table
+
+
+
+
+
+
+
+
+
+
+
+
