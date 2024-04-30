@@ -24,13 +24,16 @@ Kubernetes nodes are the worker machines that run containers. They host pods, wh
 Amazon EKS automatically handles the upgrades of the Kubernetes control plane. It schedules and applies updates while ensuring minimal disruption to the applications running on the cluster.
 
 ### 9. What is the difference between Amazon EKS and Amazon ECS?
-Amazon EKS provides managed Kubernetes clusters, while Amazon ECS provides managed Docker container orchestration. EKS is better suited for complex microservices architectures using Kubernetes.
+Amazon EKS provides managed Kubernetes clusters, while Amazon ECS provides managed Docker container orchestration. 
+EKS is better suited for complex microservices architectures using Kubernetes.
 
 ### 10. How can you scale applications in Amazon EKS?
-You can scale applications in EKS by adjusting the desired replica count of Kubernetes Deployments or StatefulSets. EKS automatically manages the scaling of underlying resources.
+You can scale applications in EKS by adjusting the desired replica count of Kubernetes Deployments or StatefulSets. 
+EKS automatically manages the scaling of underlying resources.
 
 ### 11. What is the role of Amazon EKS Managed Node Groups?
-Amazon EKS Managed Node Groups simplify the deployment and management of worker nodes in an EKS cluster. They automatically provision, configure, and scale nodes.
+Amazon EKS Managed Node Groups simplify the deployment and management of worker nodes in an EKS cluster. 
+They automatically provision, configure, and scale nodes.
 
 ### 12. How does Amazon EKS handle networking?
 Amazon EKS uses Amazon VPC for networking. It creates a VPC and subnets for your cluster, and each pod in the cluster gets an IP address from the subnet.
@@ -49,13 +52,17 @@ A Kubernetes Deployment is suitable for stateless applications,
 while a StatefulSet is designed for stateful applications that require stable network identifiers and ordered, graceful scaling.
 
 ### 17. How can you secure an Amazon EKS cluster?
-You can secure an EKS cluster by using AWS Identity and Access Management (IAM) roles, integrating with Amazon VPC for networking isolation, and applying security best practices to your Kubernetes workloads.
+You can secure an EKS cluster by using AWS Identity and Access Management (IAM) roles, integrating with Amazon VPC for networking isolation, 
+and applying security best practices to your Kubernetes workloads.
 
 ### 18. What is the Kubernetes Operator in Amazon EKS?
-A Kubernetes Operator is a method of packaging, deploying, and managing an application using Kubernetes-native APIs. It allows for more automated management of complex applications.
+A Kubernetes Operator is a method of packaging, deploying, and managing an application using Kubernetes-native APIs. 
+It allows for more automated management of complex applications.
 
 ### 19. How can you automate application deployments in Amazon EKS?
-You can use Kubernetes Deployments or other tools like Helm to automate application deployments in Amazon EKS. These tools help manage the lifecycle of containerized applications.
+You can use Kubernetes Deployments or other tools like Helm to automate application deployments in Amazon EKS. 
+These tools help manage the lifecycle of containerized applications.
 
 ### 20. How does Amazon EKS handle high availability?
-Amazon EKS supports high availability by distributing control plane components across multiple availability zones. It also offers features like managed node groups and Auto Scaling for worker nodes.
+Amazon EKS supports high availability by distributing control plane components across multiple availability zones. 
+It also offers features like managed node groups and Auto Scaling for worker nodes.
