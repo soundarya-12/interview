@@ -1,0 +1,207 @@
+Lab 50: Create Elastic Kubernetes Service (EKS) Cluster on AWS
+Delve into Kubernetes on AWS by creating an Elastic Kubernetes Service (EKS) cluster. 
+This lab guides you through provisioning and managing Kubernetes clusters for container orchestration.
+
+1. Running Kubernetes directly on Amazon EC2 machines
+
+
+
+ Create ECR, Install Docker, Create Image, and Push Image To ECR
+Dive into containerization with Amazon Elastic Container Registry (ECR). This lab covers the entire container lifecycle, 
+from creating a repository to pushing Docker images to ECR for seamless container management.
+
+Lab 16: Create a Custom Virtual Private Cloud
+Build a tailored Virtual Private Cloud (VPC) to isolate and organize your AWS resources. This lab delves into creating custom VPCs, 
+defining subnets, and configuring routing tables for optimal network architecture.
+
+Project 2: DevOps: End-to-End CI/CD Pipeline
+Establish an end-to-end CI/CD pipeline for your development workflow. This includes automating code builds, 
+running tests, and deploying applications seamlessly. The goal is to enhance collaboration among developers, 
+reduce manual errors, and accelerate the release of high-quality software.
+
+EC2
+---
+Launch a Linux EC2 Instance
+---------------------------
+Extend your EC2 skills by spinning up a Linux instance. Discover the nuances of the 
+Linux environment within AWS, from creation to connecting and managing instances efficiently.
+
+we need to sign-in to the AWS console.
+navigate to the EC2
+we need to launch instance->AMI image->t2.micro->set the security group to allow SSH access(port 22)
+then launch the instance-> with the status as running
+
+Connect to the Linux EC2 Instance
+---------------------------------
+we need to connect to Ipv4 public IP->in the local machine ->we need to use the ssh command-> for ec2-user
+then authenticate with the private key pair->connect to an ecs instance
+
+Manage your linux instance
+--------------------------
+update the system->sudo yum update #for amazon linux->sudo apt update && sudo apt upgrade -y # for ubuntu
+install those package
+configure the instance 
+terminate the instance
+
+
+Configure a Load Balancer And Autoscaling on EC2 Instances
+Optimize your infrastructure’s performance and availability by configuring load balancers and implementing auto-scaling on EC2 instances. 
+This lab equips you with essential skills for managing dynamic workloads
+
+
+VPC
+---
+Create a Custom Virtual Private Cloud
+Build a tailored Virtual Private Cloud (VPC) to isolate and organize your AWS resources. This lab delves into creating custom VPCs, 
+defining subnets, and configuring routing tables for optimal network architecture.
+
+sign to the amazon console
+for creating VPC we need to set CIDR.
+
+for creating subnet(public subnet)
+we need to set the CIDR block
+
+we need to create a Route tables 
+
+create network ACL-> edit inbound and outbound rules
+
+Work with VPC Peering Connection
+Connect multiple VPCs seamlessly with VPC peering connections. This lab provides hands-on experience in establishing 
+and configuring peering connections for secure and efficient communication.
+
+create VPC in the AWS console
+we need to ensure that DNS resolution and DNS hostname.this allows instances to be peered Vpc
+
+in AWS console we need create the VPCs Peering connection
+
+we need to update route table for the subnets in each VPC.
+then everything is setup we need to test the peering connections by launching the instances in each VPC
+and communicate using private IP address
+
+S3
+--
+Create S3 Bucket, Upload and access Files, And Host the Website
+Explore the versatile Amazon Simple Storage Service (S3) by creating buckets, uploading files, and even hosting a static website. 
+This lab provides hands-on experience in leveraging S3 for scalable and secure object storage.
+
+in the amazon console we create an S3 bucket
+then upload the files.
+we need to set permission.
+we need to enable the static web-hosting to host a website(index.html).
+then we need to use URL to access the website
+then upload (index.html) in that bucket.so that website will be launched 
+
+Create S3 Bucket Using CloudFormation
+Automate S3 bucket creation with AWS CloudFormation, streamlining your infrastructure management and ensuring consistency across deployments.
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Create an S3 bucket"
+Resources:
+  MyBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: "your-bucket-name"
+
+in AWS cloudformation we need specifies the template version
+we need to provide a desciption of the template
+we need to create AWS resource
+
+we need to deploy the cloudformation template by using AWS console
+save the template
+run the command to create the stack
+
+Create a Simple Pipeline (CodePipeline)
+---------------------------------------
+Build end-to-end continuous integration and continuous deployment (CI/CD) pipelines with AWS CodePipeline. 
+This lab provides hands-on experience in orchestrating and automating your software delivery process.
+
+->create S3 bucket for storing the pipeline artifacts.
+->this bucket will be used by codepipeline to store the aritfacts.
+->we need to create the CodeCommit-> to store the source(github)
+->we need to create CodeBuild project (which defines hoe to build the source code)
+->in tat we need to specify the source provider(code commit)
+  build environment (ubuntu,Node.js)
+  artifacts output location(S3bucket)
+->AWS console navigate the codepipeline
+we need to enter a pipeline name and select the source provider
+in the build stage we need to add the CodeBuild project
+
+in the source code we need to change if required and push it to the selected branch
+once we see the trigger build in the pipeline, we need to deploy on the changes
+
+CloudWatch – Create Billing Alarm & Service Limits
+----------
+Dive into CloudWatch, AWS’s monitoring service. This lab focuses on setting up billing alarms to manage costs effectively and 
+keeping an eye on service limits to ensure your applications run smoothly within defined boundaries.
+
+AWS billing notifications can be enabled using Amazon CloudWatch. CloudWatch is an Amazon Web Services service that monitors all of your 
+AWS account activity. CloudWatch, in addition to billing notifications, provides infrastructure for monitoring apps, logs, metrics collecting, 
+and other service metadata, as well as detecting activity in your AWS account usage.
+
+AWS CloudWatch offers a number of metrics through which you can set your alarms. For example, you may set an alarm to warn you 
+when a running instance’s CPU or memory utilization exceeds 90% or when the invoice amount exceeds $100. We get 10 alarms and 1,000 email 
+notifications each month with an AWS free tier account.
+
+Configure Amazon CloudWatch to Notify Change In EC2 CPU Utilization
+Master Amazon CloudWatch for proactive monitoring of your EC2 instances. This lab focuses on setting up notifications based on changes 
+in CPU utilization, ensuring timely responses to performance fluctuations.
+
+Build API Gateway with Lambda Integration
+-----------------------------------------
+Create a robust API Gateway and integrate it with AWS Lambda for efficient and scalable API management. 
+This lab equips you with the skills to build and manage APIs seamlessly.
+
+lambda
+------
+serverless
+we will not know where this instance is created, or hosted,autoscaling enabled or not but cannot see 
+the lambda function
+
+complete owner of this ec2
+--------------------------
+if we create the EC2 instance we get IP address
+server architecture 
+
+in which we should go server or serverless is by dev,arch,design team
+
+cost optimization
+security /compliance
+
+pass any inputs to the program are called command CLi
+there is a module which comes in python installation is sys.
+
+python boto3
+------------
+using python you need to Api server create S3 bucket ,create resources in AWS
+how to use AWS in UI (S3,ec2)
+Aws cli    CFT
+boto3	   terraform
+scripting   template
+py 
+
+want to create ec2 instance, list all S3 bucket
+if we want to implement in AWS,S3 ls is simple
+but in terraform,firstly install terraform,setup all the files for terraform,write the templating language this is not good for quick actions
+
+if i have awsCLI in S3 ls
+why should create in boto3-> serverless programin language
+2)serverless program
+using lambda function we use cloud cost optimization
+for devops engineer monitor resources on AWS
+or send out with some notifications with some alerts triggering some alerts
+there is only python,nodejs and golang
+python->boto3
+
+install aws cli in codespaces
+authenticate-> aws configure
+it will ask u the AWS access keyId
+click on secret access key
+
+pip install boto3
+
+i have to create an s3 bucket 
+import boto
+create a client
+create s3 bucket
+
+
