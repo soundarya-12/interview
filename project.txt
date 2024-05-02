@@ -1,7 +1,7 @@
 introduction and Project Explanation
 ====================================
 
-Myself soundarya, a seasoned software professional with 6 years of total experience, out of which 5 years 
+Myself soundarya, having with 6 years of total experience, out of which 5 years 
 as a DevOps Engineer and 1 year as Testing Engineer.
 
 I am well versed with various DevOps processes and expertise in areas such as CI/CD tool like jenkins, 
