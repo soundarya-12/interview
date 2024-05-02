@@ -5,7 +5,9 @@ introduction and Project Explanation
 as a DevOps Engineer and 1 year as Testing Engineer.
 
 *I am well versed with various DevOps processes and expertise in areas such as CI/CD tool like jenkins, 
-infrastructure as code (IaC) like terraform, containerization tool like docker and container orchestration tool like k8s, configuration management tool like ansible and AWS cloud services like AWS cloud services like EC2, S3,IAM,Autoscaling,VPC,Route53(fifty three),EKS.
+infrastructure as code (IaC) like terraform, containerization tool like docker and container orchestration tool like k8s, 
+configuration management tool like ansible and AWS cloud services like AWS cloud services 
+like EC2, S3,IAM,Autoscaling,VPC,Route53(fifty three),EKS.
 
 *I've worked on various projects where implementing DevOps practices has significantly improved software quality, shortened release cycles, 
 and enhanced collaboration between development and operations teams.
@@ -41,14 +43,16 @@ coming to the current project, i am working for client samsung.
 
 Samsung partners have various webservices and inhouse applications.
 
-we deploy these inhouse applications on various environments like dev,stg,prod,prod-mirror  and these activities were handled by Devops and SRE teams. 
+we deploy these inhouse applications on various environments like dev,stg,prod,prod-mirror  
+and these activities were handled by Devops and SRE teams. 
 In this project, we have around 46 microservices being developed by Spring Boot and Python and web modules using nodejs.
 
 As a Devops Team, i have onboarded the 25-26 microservices into our CICD pipelines with end to end integration of all tools 
 where we had various suites like code,Security, build, docker, ansible and k8
 deployment using helm chart.
 
-The Jenkins shared library along with the Jenkinsfile design for each microservice was done by both in an individual contribution and as a team work.
+The Jenkins shared library along with the Jenkinsfile design for each microservice was done 
+by both in an individual contribution and as a team work.
 
 Integrated all tools with the Jenkins and designed various automation scripts in shell
 and python to check the various stages conditions in pipeline.
@@ -79,7 +83,8 @@ converted the Jar into image by writing Dockerfiles.
 
 we use Docker for containerization and K8s for container orchestration.
 
-we will store artifacts and docker images in jfrog artifactory and we did Jfrog rest api automation for cleanup of old binaries was done. 
+we will store artifacts and docker images in jfrog artifactory and we did 
+Jfrog rest api automation for cleanup of old binaries was done. 
 Initially, we have nexus repository. we migrated to JFrog artifactory.
 
 we use EKS service from AWS to create K8s clusters.
@@ -114,8 +119,10 @@ formed based on the Palo alto project repositories.
 
 Troubleshooting the pod deployment along with RCA was performed
 
-I'm enthusiastic about staying updated with the latest trends in DevOps and continuously learning new tools and techniques to improve software delivery pipelines. 
-I believe in the power of automation, continuous improvement, and cross-functional teamwork to achieve faster time-to-market and deliver value to customers efficiently.
+I'm enthusiastic about staying updated with the latest trends in DevOps and continuously learning new 
+tools and techniques to improve software delivery pipelines. 
+I believe in the power of automation, continuous improvement, and cross-functional teamwork 
+to achieve faster time-to-market and deliver value to customers efficiently.
 
 Day to day activities involves:
 
