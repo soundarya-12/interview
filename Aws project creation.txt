@@ -204,4 +204,99 @@ import boto
 create a client
 create s3 bucket
 
+boto core where we can handle exceptions
+that try catch in python try accept using this we can perform exceptional handling no need to know abt excption handling
+in boto3 no need to write the try and except part where no need to know the inbuilt exception
+it provide botocore all the kind of exceptions
+
+in project session
+------------------
+devops engineer uses boto3 to create s3 buckets
+in serverless programming we would use lambda functions to perform some projects such as 
+cost optimization
+or resources monitoring on AWS 
+verifying the AWS configuration
+sending out some notifications
+
+boto3+python+lambda to perform regular task
+
+AWS lambda function is used projects for cloud cost optimization as a devops engineer
+primary resposibility
+we can trigger lamdba functions wide range of services like S3, cloud watch, we can use lot of services
+and perform activities which are basically called as event driven actions
+
+when we need to EC2 instances and Lambda functions
+when will we use?
+which service is cost efficient?
+how devops engineer use the combination of devops engineer
+with lambda functions and can help there organisations reduce the cost
+S3-> storage
+Lambda->compute|serverless
+         Ec2(virtual server)
+
+serverless  |    server
+lambda	    |	Ec2
+------	    |	---
+IP address  |	IP address
+hosted	    |	Autoscaling
+autoscaling |
+
+cloud watch to trigger the lambda function
+as devops engineer we will do some cost optimization
+there is a developer who has created the EBS volume and no one is using it
+as a devops engineer we need to delete this EBS volume and send out a notification.
+
+cloud cost optimization
+-----------------------
+most of the devops engineer uses cost optimization why is tat?
+how devops or cloud engineer and how they are going to use this projects organisation
+primary reasons
+---------------
+why people move towards the cloud is to
+1. reduce the overhead of the infrastructure.
+2.optimize there infrastructure cost
+
+on cloud platform 
+instead of going to build the data centres simply move towards the cloud platform
+and my job is done but this is a worng thing but after moving to cloud the cloud cost will go down only if you are doing efficiently
+
+example
+there is a devlper granted them with proper IAM acess this devolper can create an ec2 instance
+dev has good knowlegde on cloud and went and created the Ec2 instance on the cloud platform he has attached volume to ec2 instances
+by default when u create Ec2 instance there is a volume attached to it
+without volume you cannot store the data in the ec2 instance
+this person is taking as back-up in each volume like snapshots
+there are S3 buckets that are created by devolper forgot to delete the S3 bucket the charge will go significalty high
+or this person has created a EKS cluster forgotten to delete the eks cluster
+there are 200 resourses on AWS manually monitoring this 200 resources verify if someone has created some stall resources
+stale resources means->someone has created but forgotten to delete the resources this way cloud cost will go high if you are not doing cost efficiently
+
+this is primary responsiblity of devops enginer
+devops engineer should make sure the cloud cost should go down looking at if there are stale resources in the cloud platform
+devops enginner-> can send out the notifications
+notifications->he i have noticed that you have created a EBS volume it is not attached to any Ec2 instance or you have created bunch of snapshots and this snapshots are not attached 
+to any volumes or any Ec2 instance so why dont you delete them
+if devops engineer has access and permissions to delete them we can goahead and delete the instances.
+
+how devops engineer can do cost optimization using the delete option->by deleting the stale resources.
+we will use Lambda function inside this lambda function we will write the python code which is quite general for devops engineer
+you write python code in the lambda function we will use a module in the python code called BOTO3
+boto3-> will talk to AWS APIs 
+we will write a lambda functions individually-> for EBS snapshots we can write the lambda functions 
+this python code will talk to this AWS API and will get complete information of EBS snapshots if there are stale snapshots and there are active snapshots or if some volumes are usually 
+using this snapshots or that volume is already deleted or volume is not attached to Ec2 instance then you can delete those snapshots using the same lambda functions
+we can trigger this lambda function using the cloud watch.
+
+firstly, we have lambda function 
+Problem statement is that there are some EBS volume snapshots
+this developer has an Ec2 instance and for this Ec2 instance the devoloper uses its volume this can be an inbuilt volume
+tht comes with an Ec2 instance fo
+r this volumes the devopler has created the multiple snapshots because he felt that information is important
+later the devolper has deleted the volume and deleted the Ec2 instance or just deleted the ec2 instances this snapshots and volumes are not deleted.
+case1:- just the ec2 instances is deleted
+case2:-Ec2 instance and volume both are deleted 
+
+step1:- fetch all the EBS snapshots
+step2:- to filter out the snapshots that are stale once we identify this stale we will delete the snapshot
+
 
