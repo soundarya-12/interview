@@ -1,0 +1,78 @@
+explain your current CI/CD setup?
+CI/CD tooling 
+what are the tools you are using?
+what is CI/CD accordig to you
+how CI/CD is established in your organisation
+
+jenkins.
+in the current organization we use github as a source repository.
+we are using jenkins for continous integregration where we have set-up webhook
+which triggers that each and every commit that is made to github and triggers a ci pipeline on jenkins
+
+1.build stage- takes cares of ststic code analysis,unit testing and build
+2.test stage- running smoke and functional tests
+3.deploy stage- push artifacts to the registry,prepare deployment manifasts and deploy on the cluster
+
+what is your stage in jenkins
+what is your artifactory?how you are building your docker image or application arcive
+how you are deploying on to your kubernetes cluster or weblogic application service server
+
+
+Static Code Analysis: We use tools like SonarQube or Checkstyle for code quality checks.
+Unit Testing: We use frameworks like JUnit (for Java), PyTest (for Python), or Go’s testing framework depending on the language.
+
+we use a Dockerfile to build the Docker image in this stage using the docker build command inside Jenkins
+
+Test Stage:
+
+ Execute tests (smoke, functional, or integration tests) to ensure quality before deployment.
+
+Smoke Tests: Simple health check tests to verify basic functionality.
+
+Automated Test Execution
+
+Deploy Stage:
+Objective: Push artifacts (Docker images or WAR/JAR files) to an artifact repository, generate deployment manifests (if necessary), and deploy to the Kubernetes cluster.
+
+Artifact Repository: We use Artifactory or Nexus to store versioned Docker images, WAR/JAR files, or other build artifacts.
+
+Deployment to Kubernetes: Deployment manifests (YAML) are prepared in this stage, and kubectl or Helm is used to deploy the application to a Kubernetes (EKS) cluster. We define Kubernetes manifests (Deployment, Service, ConfigMap, Secret) or use Helm charts for complex deployments.
+
+ Jfrog Artifactory-artifact repository to store and manage the build artifacts.
+
+we build docker images using
+dockerfile
+jenkins pipleine- to build the docker image
+pusing to artifactory
+
+Kubernetes:
+
+Manifest Files: We define Kubernetes deployment YAML files or use Helm charts. These files are often prepared during the CI pipeline to reflect the new Docker image tag.
+kubectl/Helm Commands: Once the manifest is prepared, Jenkins executes kubectl apply -f or helm upgrade commands to deploy the application to a Kubernetes cluster (EKS in AWS).
+Rolling Updates: Kubernetes ensures zero downtime by deploying with rolling updates, ensuring the old version is replaced gradually.
+Monitoring: We set up Prometheus and Grafana to monitor deployments and ensure everything is running smoothly.
+WebLogic Application Server (if applicable):
+
+WAR/JAR Files: For applications deployed on WebLogic, we generate the WAR/JAR files in Jenkins and push them to Nexus.
+Deployment Tools: We use WLST (WebLogic Scripting Tool) or WebLogic’s Admin Console to deploy the WAR/JAR files to the WebLogic server, either automatically or with manual intervention depending on the environment.
+Configuration Management: Configuration changes are handled via WebLogic domain settings, and Ansible can be used to automate configuration tasks.
+
+how do you handle secrets
+application secrets
+credentials
+sensitive info
+code repo like- github,gitlab,bitbucket
+CI/CD-jenkins,bamboo,jfrog,teamcity harness,gitlab.
+cloud provider and container platforms- AWS,GCP,AZUre
+infrastructure-ssh keys,load balancer credentials
+
+tools: hashicorp vault,AWS systems manager,Azure vault
+
+deployment strategy
+=====-=-=-=-=-=-=-=-=
+ci- jenkins/github actions
+
+jenkins setup
+=-=-=-=-=-=-=-
+jenkins setup/backup and scaling up
+
