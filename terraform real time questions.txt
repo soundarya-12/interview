@@ -1,4 +1,5 @@
-1.you are managing a complex infrastructure with multple components and you need to ensure that terraform deploys all 
+1.you are managing a complex infrastructure with multple components and you need to ensure 
+that terraform deploys all 
 resources in the correct order. what steps can you take to accomplish this?
 
 Implicit Dependencies
