@@ -230,12 +230,16 @@ Use user_data if you need to run initialization scripts at instance startup.
 Use remote-exec for post-creation tasks that require the instance to be accessible and ready.
 Use local-exec with SSH if you prefer to execute commands from the local machine to the instance.
 
-4.You want to create a Terraform module that can be reused across multiple projects, but you need to parameterize certain values so that they can be customized for each project. 
+4.You want to create a Terraform module that can be reused across multiple projects, 
+but you need to parameterize certain values so that they can be customized for each project. 
 How can you accomplish this in Terraform?
 
-To create a reusable Terraform module that can be customized for each project, you can parameterize values using input variables. 
-This allows you to define configurable parameters within the module that can be set differently for each project that uses it. 
-To create a reusable Terraform module that allows for customization across multiple projects, you can define input variables within the module. These variables can be 
+To create a reusable Terraform module that can be customized for each project, 
+you can parameterize values using input variables. 
+This allows you to define configurable parameters within the module that can be set 
+differently for each project that uses it. 
+To create a reusable Terraform module that allows for customization across 
+multiple projects, you can define input variables within the module. These variables can be 
 set with different values for each project, enabling flexibility while keeping the module generic.
 
 Create the Module Directory Structure
@@ -477,7 +481,8 @@ Terraform creates instances only for the items in resources_to_create where the 
 resource_b is skipped because its value is false.
 
 **Use depends_on to Control Resource Ordering
-you can use the depends_on argument to directly set dependencies instead of having Terraform infer them based on references. 
+you can use the depends_on argument to directly set dependencies instead of 
+having Terraform infer them based on references. 
 This lets you control which resources are deployed in which order.
 
 resource "aws_security_group" "example" {
@@ -499,7 +504,8 @@ In Terraform, you can control whether a resource is created or skipped by using 
 for_each meta-arguments in combination with conditional expressions.
 
 6.You want to deploy a Terraform configuration that creates an EC2 instance in a specific availability zone, 
-but you are not sure which availability zone to use. How can you dynamically select an availability zone at runtime in Terraform?
+but you are not sure which availability zone to use. How can you dynamically 
+select an availability zone at runtime in Terraform?
 you can dynamically select an availability zone (AZ) at runtime by using the data source for 
 AWS availability zones. This approach enables you to retrieve a list of available zones in the target region 
 and select one from that list. the various ways to do it:
@@ -804,9 +810,12 @@ Manage Networking and Connectivity
 
 To allow your application to connect to the RDS instance:
 
-Configure Security Group Rules: Make sure the security group allows incoming connections on the database port.
-Set up VPC Connectivity (if in a VPC): Ensure that both the RDS instance and application are in the same VPC or are peered.
-Parameterize VPC Settings: If you need multi-environment compatibility, parameterize VPC IDs and subnet IDs to deploy RDS in different environments.
+Configure Security Group Rules: Make sure the security group allows incoming 
+connections on the database port.
+Set up VPC Connectivity (if in a VPC): Ensure that both the RDS instance and application 
+are in the same VPC or are peered.
+Parameterize VPC Settings: If you need multi-environment compatibility, 
+parameterize VPC IDs and subnet IDs to deploy RDS in different environments.
 
 Enable Backups, Monitoring, and Performance Features
 
