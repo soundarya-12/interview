@@ -3,37 +3,51 @@ What are the Challenges you faced !
 
 1. Pipeline is not working 
 ===========================
-One of the application developer wants to promote the code to Pre-prod environment, unfornately pipeline is not working 
+One of the application developer wants to promote the code to Pre-prod environment, 
+unfornately pipeline is not working 
 
-ans1: when I started  verifying the issue I came to know that what  ever the jenkins slave node where this is gettting executed  that node is having some issue with storage ..
+ans1: when I started  verifying the issue I came to know that what  
+ever the jenkins slave node where this is gettting executed  
+that node is having some issue with storage ..
  
-ans2: when I started looking to the issue there is a problem with code checkout where slave node is facing connectivity issues with git and its unable to clone the code 
+ans2: when I started looking to the issue there is a problem with code 
+checkout where slave node is facing connectivity issues with git 
+and its unable to clone the code 
 
-ans3: when ever the build job is getting executed its failing at a particular step which it need some dependend packages from the other build job which its not avaialble hence this build job is failing. 
+ans3: when ever the build job is getting executed its failing at a particular 
+step which it need some dependend packages from the other build job which its 
+not avaialble hence this build job is failing. 
 
 2. Ansible playbook is not working 
 ===================================
 
-ans1: When I have executed the playbook there are 200 servers on which we need to deploy our application configuration.  
+ans1: When I have executed the playbook there are 200 servers on which we 
+need to deploy our application configuration.  
 unfortunately its getting failed to execute the code on all these servers. 
-when I started debugging the code there is one task which making other tasks to fail, hence i used  ignore_error: true for that particular task and ran the code. 
+when I started debugging the code there is one task which making other tasks 
+to fail, hence i used  ignore_error: true for that particular task and ran the code. 
 
 3. Server  is not coming up 
 ============================
 
-ans1: one of our collegue delete root filesystem. We have configured proper snapshots for the machines 
+ans1: one of our collegue delete root filesystem. We have configured 
+proper snapshots for the machines 
 immediately i took the latest snapshot & brought the server back 
 
 4. Loadbalancer is not connecting or instances are showing unhealthy
 =====================================================================
-ans1: there is one issue raised by application teams saying that application is not working, 
-when i went and verified the configuration i came to know that all the instances under the LB are showing as unhealthy
-I immediately logged in to the servers and I verified my application status locally in the server and I found
-"that the application is not coming up because of code failures, hence I informed developer to correct the code"
+ans1: there is one issue raised by application teams saying that application 
+is not working, when i went and verified the configuration i came to know 
+that all the instances under the LB are showing as unhealthy
+I immediately logged in to the servers and I verified my application status 
+locally in the server and I found "that the application is not coming up because 
+of code failures, hence I informed developer to correct the code"
 OR
 
-"that the application port which is allocated for that application is wrongly consumed by some other service in the servers. 
-when I verified the port status using my netstat -nap|grep :portname;ps -ef|grep -i processid I came to know that this port is  
+"that the application port which is allocated for that application is
+wrongly consumed by some other service in the servers. 
+when I verified the port status using my netstat -nap|grep :portname;
+ps -ef|grep -i processid I came to know that this port is  
 consumed by some other application hence this application is not coming up "
 
 OR
@@ -47,47 +61,75 @@ OR
 5. Docker service is not coming up  && 6. Docker storage is full
 =================================================================
 
-ans: what ever the storage allocated for the docker deamon is consumed and unfornately there is not proper monitoring configured hence I took this as initiative and I created a script which will automatically runs every 1 hour and check the filesystem size if it feels that the size is more then it will purge all the unused images and it will clean the space. 
+ans: what ever the storage allocated for the docker deamon is consumed and unfornately 
+there is not proper monitoring configured hence I took this as initiative and I created 
+a script which will automatically runs every 1 hour and check the filesystem size if it 
+feels that the size is more then it will purge all the unused images and it will clean the space. 
 
-It also send me one email notification to my mailid once its done with housekeeping. I felt like shell is the best guy to do this work hence i automated this end-to-end workflow using shell scripting 
+It also send me one email notification to my mailid once its done with housekeeping. 
+I felt like shell is the best guy to do this work hence i automated this end-to-end 
+workflow using shell scripting 
 
 7. Eks/K8S cluster is not coming up 
 ====================================
-when i verfied the cluster I found that all the control pane objects like apiserver,etcd,scheduler,controller are not coming up
-Static Pods: what ever the services we are running as normal pods which are controlled by my kubelet 
+when i verfied the cluster I found that all the control pane objects like 
+apiserver,etcd,scheduler,controller are not coming up
+Static Pods: what ever the services we are running as normal pods 
+which are controlled by my kubelet 
 
-ans: when ever I verified that the cluster is not responding to the kubectl commands, I came to know that there is issue with  my kubelet service & 
-I figured it out like the StaticPod path is wrongly configured for the kubelet service. Hence all my  core components are not coming up which made my cluster to go down.
+ans: when ever I verified that the cluster is not responding to the 
+kubectl commands, I came to know that there is issue with  my kubelet service & 
+I figured it out like the StaticPod path is wrongly configured for the kubelet 
+service. Hence all my  core components are not coming up which made my cluster to go down.
 
 8. Deployments are failing 
 ==========================
 
-'ImgPullErr': when I verified my deployment there is some problem with pull secret or Image is wrongly given
-Volumeissue: when my deployment is trying to come up it is depending on the volume which is not configured properly as part of deployment configuration I remodified it, then its started working properly
+'ImgPullErr': when I verified my deployment there is some problem with pull secret 
+or Image is wrongly given
+Volumeissue: when my deployment is trying to come up it is depending on the volume 
+which is not configured properly as part of deployment configuration I remodified it, 
+then its started working properly
 
 9. pod's are not coming up
 =========================== 
-when i verified this issue I came know that my worker nodes are under high pressure and all the pods started evicting from one node to other node. 
-When I dig the issue more I came to know that 2/3 workers nodes are down because of network issues.
+when i verified this issue I came know that my worker nodes are under high pressure 
+and all the pods started evicting from one node to other node. 
+When I dig the issue more I came to know that 2/3 workers nodes are down 
+because of network issues.
 
-in order to solve this problem I immediately changed the nodeselector value of my production namespaces & i bound the deployments to a stable node so that we are not going to face the downtime for the application
+in order to solve this problem I immediately changed the nodeselector value of my 
+production namespaces & i bound the deployments to a stable node so that we are 
+not going to face the downtime for the application
 
 10. production deployment failure
 =================================
-we released a new version for our application where we configured rolling deployment for the services. Everything went well and application was working as expected, unfornately after 6 hours we started facing issue with the application performance.
+we released a new version for our application where we configured rolling deployment 
+for the services. Everything went well and application was working as expected, unfornately 
+after 6 hours we started facing issue with the application performance.
  
-Its a critical application where customers started escalating the issue, so immediately they want to revert back the changes to the previous version
+Its a critical application where customers started escalating the issue, 
+so immediately they want to revert back the changes to the previous version
 
-I have a habbit of deploying the services using "--record" option where I can track it out what are and all the changes  are happening on the deployment. I immediately verified my deployment rollout history using 
-"kubectl rollout history deploy deployment" and I found that my previous version update is recorded properly 
-then I simply rollout the previous version for my application & everything started working in minutes. Hence I saved downtime.
+I have a habbit of deploying the services using "--record" option where 
+I can track it out what are and all the changes  are happening on the deployment. 
+I immediately verified my deployment rollout history using 
+"kubectl rollout history deploy deployment" and I found that my previous version update 
+is recorded properly 
+then I simply rollout the previous version for my application & everything 
+started working in minutes. Hence I saved downtime.
 
 11. one of the production application is down
 ============================================== 
 
-ans1: there is one issue raised by application teams saying that application is not working, when i went and verified the configuration i came to know that all the instances under the LB are showing as unhealthy
-I immediately logged in to the servers and I verified my application status locally in the server and I found
-"that the application is not coming up because of code failures, hence I informed developer to correct the code"
+ans1: there is one issue raised by application teams saying that application 
+is not working, when i went and verified the configuration i came to know that 
+all the instances under the LB are showing as unhealthy
+I immediately logged in to the servers and 
+I verified my application status locally in the server and 
+I found
+"that the application is not coming up because of code failures, 
+hence I informed developer to correct the code"
 
 OR
 
@@ -114,16 +156,28 @@ Not only this but also I have designed & developed my end to end CICD process fo
 
 2. Implementation of microservices for the legacy application 
 ==============================================================
-As part of digitilization our company is planning to migrate the legacy or monolithic applications to microservices. I took  this oppurtunity and i started collecting different information from diff application developers like platform needs such as softwares (java,node,maven,tomcat,apache,nginx,centos,redhat) and I started customizing the docker images for all these  applications. 
+As part of digitilization our company is planning to migrate the legacy 
+or monolithic applications to microservices. I took  this oppurtunity 
+and i started collecting different information from diff application developers 
+like platform needs such as softwares (java,node,maven,tomcat,apache,nginx,centos,redhat) 
+and I started customizing the docker images for all these  applications. 
 
-we felt that K8S will satisfy our needs hence I installed & configured my k8s cluster. I started with small java based application and I succefully migrated my monolithic service in to microservices architecutre  & Gave demo to my team everyone felt happy  and I got appreciation mail for my work.
+we felt that K8S will satisfy our needs hence I installed & configured my k8s cluster. 
+I started with small java based application and I succefully migrated my monolithic service 
+in to microservices architecutre  & Gave demo to my team everyone felt happy  
+and I got appreciation mail for my work.
 
-3. Reducing the deployment time to market && 4. Succesfully automated end to end CICD implementation for the java application CICD Process for your application delivery 
+3. Reducing the deployment time to market && 4. Succesfully automated end to end CICD 
+implementation for the java application CICD Process for your application delivery 
 
-6. There is some important fix which we need to deploy for all our servers as part of security concern.
-I took this as initiative and started developing the code with my Ansible, this will pick the servers where 
-the version for the package and if the version of the package  is <required package version then it will remove the old version and it will install the new version in all the servers. 
-As a result of my work I got good appreciation mail from my lead as it save almost 20 days of manual work which my code  did it in 2 hours ..
+6. There is some important fix which we need to deploy for all our servers 
+as part of security concern.
+I took this as initiative and started developing the code with my Ansible, 
+this will pick the servers where 
+the version for the package and if the version of the package  is 
+<required package version then it will remove the old version and it will install the new version in all the servers. 
+As a result of my work I got good appreciation mail from my 
+lead as it save almost 20 days of manual work which my code  did it in 2 hours ..
 
 
 Scenario Oriented Questions:
