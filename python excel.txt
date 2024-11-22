@@ -1,0 +1,56 @@
+To create a Python script that reads data from two Excel files, 
+combines the data, and writes the combined output to a single Excel file 
+with a bar chart, you can use the pandas library for data manipulation 
+and openpyxl for chart creation. Here's an example:
+
+Reading Data: The script reads two Excel files using pandas.read_excel().
+Combining Data: It concatenates the data using pd.concat().
+Writing Data: The combined DataFrame is written to an output 
+Excel file with pandas.ExcelWriter (using the openpyxl engine).
+Creating a Chart: A bar chart is added using openpyxl.chart.BarChart. 
+The data and categories are referenced dynamically based on the size of the 
+combined DataFrame.
+Saving the File: The combined file is saved as combined_output.xlsx.
+
+import pandas as pd
+from openpyxl import Workbook
+from openpyxl.chart import BarChart, Reference
+from openpyxl.utils.dataframe import dataframe_to_rows
+
+# Step 1: Read two Excel files
+file1 = 'file1.xlsx'
+file2 = 'file2.xlsx'
+
+# Assuming both files have a sheet named 'Sheet1' with the same structure
+df1 = pd.read_excel(file1, sheet_name='Sheet1')
+df2 = pd.read_excel(file2, sheet_name='Sheet1')
+
+# Step 2: Combine the data
+combined_df = pd.concat([df1, df2], ignore_index=True)
+
+# Step 3: Write combined data to a new Excel file
+output_file = 'combined_output.xlsx'
+with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+    combined_df.to_excel(writer, sheet_name='Data', index=False)
+    
+    # Get the workbook and worksheet to add a chart
+    workbook = writer.book
+    worksheet = writer.sheets['Data']
+
+    # Step 4: Add a bar chart
+    chart = BarChart()
+    chart.title = "Combined Data Bar Chart"
+    chart.style = 10  # Chart style
+    chart.x_axis.title = 'Categories'
+    chart.y_axis.title = 'Values'
+
+    # Assuming the first column is categorical and the rest are numerical
+    rows, cols = combined_df.shape
+    data = Reference(worksheet, min_col=2, min_row=1, max_col=cols, max_row=rows + 1)
+    categories = Reference(worksheet, min_col=1, min_row=2, max_row=rows + 1)
+
+    chart.add_data(data, titles_from_data=True)
+    chart.set_categories(categories)
+    worksheet.add_chart(chart, "E5")
+
+print(f"Combined data with a bar chart saved to {output_file}")
