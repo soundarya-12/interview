@@ -1,0 +1,411 @@
+project
+-==-=-=-=
+step 1:- understanding the project
+step 2:- envirnoment and terminalogy
+docker,k8s
+step3;- end to end flow
+idetaion
+design
+development
+testing
+deployment
+monitoring
+
+step 4:- devops tools
+jenkins,git,ci/cd piplines ensuring code quality
+step 5: challenges and solutions
+headales targets
+step 6:result and impact
+
+devloper-1 devpr-2
+
+how work will be distributed
+-=-=-=-=-=
+jira ia tool which we can track bugs features, create for a product
+
+PO-> will put in the Jira
+this step is called as planning step
+devlpr will assign the user stories by themseleves
+feature enhancement bug
+
+how the work is distributed
+generally there will be a lead
+dev1-has a lead->will have a conversation with PO
+PO will transfer al the work with the devlopr
+dev will have a user stories which could be 
+feature enhancement bug
+this code will come with the SCM
+SCM->source code management
+step 2;- coding
+
+step3:-devops engineer
+devopler has put a code in the SCM. now from there explain the CI/CD process
+build->critical role
+they put the code SCM-> github,bitbucket,code commit,azure repos
+CI
+-=-=
+in the build step 
+we do the source code compilation
+the code return in HLL(dev) java,c++,python transformed into machine readable instruction
+through the compilation process
+we need a tool for that ->jenkins,Azure devops,teamcity,circleci etc
+once this s done there would be an artifact produce out of it
+
+**what kind of an artifact you produced
+artifact -> java -> ear file/war file/jar file
+C#/.net based code -> dll we can package it using zip, make a tar of out in linux
+angulr/node js/react ->npm build
+
+what kind of an artifact you produced
+python .whl
+how it is in been build
+setup.py
+
+Environment Setup
+through Jenkins' Python plugin pyenv
+Install dependencies like pip, setuptools, and wheel
+Install additional tools like pytest for testing, sphinx for documentation, 
+or Docker if building Docker images.
+
+Code Linting and Static Analysis
+code quality -	tool flake8 
+
+Run Tests
+validate code functionality-unittest
+
+ Build and Package
+Package the Python project as a wheel
+ python setup.py bdist_wheel to create a wheel file
+
+Build Docker Image
+create a Docker image as an artifact.
+Build a Docker image with the application’s wheel file and Push the image to a container registry
+
+we use Archive Artifacts- where we store the docker image, test reports,documentation
+
+deployment is done in K8s cluster and verify the health checks
+  
+security scanning
+we use third-party libraries which may contain vulnerabilities pip-audit (scans dependencies to identify known vulnerabilities).
+
+Static Code Analysis
+Pylint plugin-code qaulity examining the source code without executing it.
+
+Secret Detection
+GitLeaks tool- API keys, passwords, and tokens in the codebase
+
+SQL injection
+Mitigation: Use parameterized queries to prevent injection
+
+Cross-Site Scripting (XSS)
+Mitigation: Use a templating engine that automatically escapes variables 
+
+code coverage
+for providing detailed reports showing which lines of code are executed during tests.
+
+coverage.py tool
+Running Tests with Coverage
+Generating a Report
+Viewing the HTML Report
+integreated to jenkins
+ Code Coverage
+What happens: Code coverage analysis measures the percentage of code exercised by tests, 
+helping identify untested parts of the codebase.
+
+How it works:
+
+Command: coverage run -m pytest tests/ and coverage report --fail-under=80
+Explanation: coverage.py runs pytest and measures which parts of the code are executed. After running, coverage report --fail-under=80 ensures that the coverage meets a minimum threshold (e.g., 80%). If coverage is below this level, the pipeline fails.
+An HTML report is generated (coverage html) to visualize which parts of the code were not covered, and this report is archived in Jenkins.
+In this setup:
+
+Install Dependencies: Installs the required packages, including coverage.py.
+Run Tests with Coverage: Runs tests with coverage run.
+Generate Coverage Report: Creates a text and HTML coverage report.
+Publish Coverage Report: Archives the HTML report, making it available in Jenkins.
+
+
+To ensure code coverage meets a minimum threshold, 
+you can configure Jenkins to fail if coverage is below a certain level.
+
+# Run tests and enforce a minimum coverage threshold (e.g., 80%)
+coverage run -m pytest
+coverage report --fail-under=80
+
+You can add this command in the Jenkins pipeline. If coverage falls below 80%, the build will fail.
+
+**how it is in been build
+inside the java artifact we use a tool that is maven/gradle/ant(old)
+setup.py
+how is the build process happening? in maven
+Virtual environments are created using venv, pipenv - in python 
+
+for angulr->npm build-> build it and make that artifact out it -> it could be a 
+zip file
+
+step 4:- packaging
+
+zip it and put over somewhere
+when we package it we put it over somewhere.
+this is where artifact come in handy
+
+the artifactory would be nexus,azure artifacts,S3 bucket AWS, Jfrog, VMs
+
+here generally completes CI
+
+
+
+
+
+
+bonus-> security scanning->sonar cube (code quality)
+        		   code vulnerbalities	
+			   code cobverage
+
+how to explain example of code coverage
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+method 1-
+unit test
+method 2-
+unit test
+method 3-
+unit test
+method 4-
+unit test
+
+how do you write this test cases junit,xunit,nunit
+
+security part if there is no JAR files or an artifact
+an artifact could be a docker image
+how do i scan it 
+tool -> synk /veracode/ checkmarx/coverity
+
+if the code that gets checks in
+
+1-(checkin)
+2-scanning - vulnerbalities/security sonar cube
+Quality gates and sonar cube
+Code coverage we can put the condition in the quality that 85% of my code 
+should be covered
+
+what exactly it is coming 85%,70%
+
+environments
+1. dev
+dev
+bug
+enchanced
+
+2. QA
+functional testing
+integretating testing
+performance
+security-regression testing
+QTP/selenium tool
+
+3.UAT
+User acceptace testing
+staker holders
+it ensure that it meet there exceptations
+pre-prod
+branching strategy
+
+4.prod 
+live environmrnt
+s/w is deployed in the end users
+
+3-build
+4.package
+
+techstack->all tools
+after dev ->SCM
+**build process
+**how are you packaging it
+check marker->build->packaging->deployment
+dockerfile
+explain how it is happening
+how deployment its happening
+
+
+
+challeges in devops
+
+CI/CD
+-=-=-=-
+secret management
+gitlab CI/CD where did i store the password related to sonar API
+we use gitlab 
+
+resource sharing
+-=-=-=-=-=-=-=-=
+dev/QA/prod
+
+how do you share the k8s resources/allocate the k8s dev or project teams
+
+e-commerce application
+web
+paymenet
+transaction
+
+
+For this project, I set up a Jenkins pipeline that starts on each commit to the GitHub repository. The pipeline builds a Docker image, runs tests, and, once passed, pushes the image to an ECR registry. Jenkins then triggers a deployment to a Kubernetes cluster where we use Helm to manage Kubernetes resources. We used a rolling update strategy to ensure zero downtime, and monitoring was set up with Prometheus and Grafana to alert on any post-deployment issues. This setup enabled smooth, automated CI/CD with minimal manual intervention and ensured quick rollback in case of issues."
+i will creating the namespaces
+here coems the actuall challenge
+in kubernetes consist of all the worker nodes togther
+100cpu
+100RAM
+
+started deploying the services onto the namespaces
+within the payments for some reason in the namespace they are leaking memory
+they are consuming menory more than required for some reason
+there can be some issue with application or payments team doesnot preform the preformance related
+it started leakaking the menory and it started leaking most of the resources k8s
+
+idealy it has to contain 2GB ram
+because of the leakage of the memory it took 32gb ram
+other resources it could only utlilize 60gb or might not get the resources
+it might go to the crash loop because of OOM killed issue
+out of memory killed error 
+
+it is our responsibility to make sure that we provide only the required resources to the particular namespaces
+
+solution
+-=-=-=-=
+for ns-> we have comeup with resource quota
+it is limit that is applied in the namespace
+we can set the limit with respected to CPU and RAM
+performance bench marking in which devlpr has to come from ideal namespace
+15gb ram
+15cpu
+for each pod we setup a limit
+
+as a devops engineer when i joined the organisation there
+was a cluster which was shared between multiple devpmet team
+so becase of one of the pod which was leaking memory the entire cluster was impacted
+we didnt not which pod is going down why is it going down
+which pod is going down in which namspace because of out of memory
+i have set up the resource quota and setup the resource limits for that particular pods of the namespace
+because of this i could identify which pod is creating the issue and identify the blast radius coming down to one particular pod
+
+we can question dev 
+ 
+senario-1
+once you setup the resource quota and resource limit you have identitied which pod is leaking memory
+then i have noticed that particular pod is going into OOM killed which is a crashed loop backoff
+actuall error is OOM killed
+when we do the kubectl get pods we will see the status crash loop back off
+but when you do kubectl describe on that particular pod we will see that crash loop backoff
+OOM killed 
+we have noticed that one of the pod is gone to OOM killed this is another very important real time challenge
+how will you resolved ?
+i have noticed this issue on our production environment on our dev/ staging environment
+i have noticed that one of the pod is going down because OOM killed issue
+i have already setup the resource quota and already setup the resource the limits
+is going into OOM killed even after it is going into 8gb ram as per the performance batch mark
+what i have done is 
+java application
+i went to this pod and i have shared the thread dump and also the heap dump with the dev team
+dev team will do analysis like which thread is leaking 
+then they will send the new Version and we will upload it
+
+senario 3:-
+one of our challenges is we have faced is upgrades 
+k8s 1.29
+k8s 1.30
+
+i have created a detailed steps for 
+how to take backup before performaning the upgrades
+how to gothrough the release notes
+and i have divided the control plane conponenets and worker nodes
+in control plane 
+i have detailed the steps on how to start with ETCD
+and how to upgrade the kube API server 
+how to upgrade the version of scheduler
+what are the steps i have been noted down
+
+in worker node
+first we drain a node
+we will give a particular time(scedular time) to move the pods from a particular node to a 
+different node or to different nodes of a k8s cluster once the pods are moved and 
+the node is empty like no resource running on it or no micro services are running on the node
+then you will make the node unscdedulable we will do both of them at the same time
+we will taint the node, we will cot down the node, make nodes unscdeluable 
+in kubeschedulr there will working 2 node
+another node we will disconnect the node then then we will upgrade the kubelet
+to the new version and you will install other new version and new packages that are required on this particular node
+and then you wil bring this up and join the node up again back to the kubernetes cluster and this time
+we will remove the unscdeularbilty,taint
+ 
+worker plane
+
+  
+
+AWS
+setup ->VPC-IP range 
+public subnet and private subnet
+any resource which can be accessed through internet that will reside from our public subnet
+any resource which doesnot need an internet access that can only be accessed from internally from public subnet
+databases are accessed only from our application will reside into our public subnet and those will be able to communicate
+our public subnet
+
+internet gateway
+we will be creating inside our public subnet so that any resource which we will be creating inside our public subnet
+wil have an access to our internet as well as anyone has outside world can access the resource present in our public subnet through internet gateway
+
+route table
+-=-=-=-=-=-
+2 RT
+1 is for public subnet and another is for private subnet
+route table is responsible for routing the request
+like if anyone is reside outside particular env the req will come by the internet gateway
+route table will be responsible for forwarding the request from internet gateway to our subnet
+we need to create route for our public subnet from our internet gateway
+
+in private subnet we dont need to create the internet gateway
+
+NAT gateway
+-=-=-=-=-=-
+since we are working in our public subnet we will not be creating our NAt gateway inside our infra for jenkins
+finally we are creating EC2 instance inside our jenkins
+
+security groups
+-=-=-=-==-=-=-=-
+when we are allowing our security groups which we will be creating
+security groups are just our firewalls for our linux machine in case for our EC2 instance
+when ever we are creating security groups we are just allowing or disallowing the ports 
+in our firewall
+port(443) for SSh
+port(22) for ssh into our ec2 instance
+port(80) we can access jenkins running on our port 8080
+
+we need to setup our load balancer
+-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+we can set our balancer to point our domain to this particular load balancer using the route53
+this load balancer will point to target group which and that target group will point to EC2 instance
+
+Url we will have HTTp when ever someone will access first it will land on route53
+route53 wil forwarded it to application load balancer will foewarded to target group nad 
+target group will forward it to EC2
+
+for creating a http manger we need a hosted zone
+
+hosted zone setup in AWS
+-==-=-=-=-=-=-=-=--=-=-=-
+
+
+deploy REST API application
+-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+jenkinsfile setting up the whole pipeline
+from github repo we will setup jenkins files
+with the help of jenkinsfile we will create our pipeline jenkins(eu-west-1)
+it will provision the whole infra to us
+where we will setup the VPC
+where we will setup the subnet
+public and private subnet
+internet gateway
+route table
+EC2 instance
+REST API application using python and RDS install with mysql
+
+python flash API-5000 port

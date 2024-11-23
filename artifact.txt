@@ -1,0 +1,91 @@
+explain how it is happening
+step-by-step after the SCM checkout
+
+Setup and Install Dependencies: Ensures all necessary libraries are available.
+Quality Checks: Verifies code style, security, and types.
+Testing and Coverage: Runs tests and checks code coverage, failing the build if minimum thresholds aren’t met.
+Packaging: Creates a distributable artifact (e.g., .whl).
+Security Scanning: Identifies security risks in the code and dependencies.
+Artifact Storage: Stores the artifact in a repository for easy access in deployment stages
+Jenkins uses checkout scm to pull the latest code from the github
+
+Install Dependencies
+After checking out the code, Jenkins installs all required 
+Python packages specified in requirements.txt
+
+Using pip install -r requirements.txt, 
+Jenkins installs libraries and dependencies needed by the application.
+
+Code Quality Checks
+
+we check for the 
+
+1. Checkout Code
+What happens: Jenkins uses checkout scm to pull the latest code from the source code management (SCM) system (e.g., GitHub, GitLab). This stage ensures that the most recent code version is used for building.
+
+How it works: Jenkins clones the repository using the configured SCM settings, providing the pipeline with the complete codebase.
+
+2. Install Dependencies
+What happens: After checking out the code, Jenkins installs all required Python packages specified in requirements.txt.
+
+How it works: Using pip install -r requirements.txt, Jenkins installs libraries and dependencies needed by the application. This step prepares the environment to run the code and tests without dependency errors.
+
+3. Code Quality Checks
+What happens: This stage runs code quality tools (e.g., flake8 for linting, bandit for security checks, and mypy for type checking) to catch any issues in the code structure, style, or security flaws.
+
+How it works:
+
+Linting (flake8 src/): flake8 analyzes the code for PEP8 compliance and stylistic issues. It reports if any formatting or coding standard issues are present.
+Security Scanning (bandit -r src/): bandit checks for common security vulnerabilities by analyzing the code for potential security risks.
+Type Checking (mypy src/): mypy checks Python code for type correctness, helping detect potential type-related bugs.
+These checks ensure that the code meets quality and security standards before proceeding.
+
+4. Run Tests
+What happens: Automated tests are executed to verify the functionality of the code. If any tests fail, the pipeline stops, as it indicates a problem in the code.
+
+How it works:
+
+Command: pytest tests/ --junitxml=test-results.xml
+Explanation: pytest is used to run unit tests written in the tests/ directory. The --junitxml option generates a JUnit-style XML report, which Jenkins reads to display test results in its UI.
+This step confirms that the code works as expected and that recent changes haven't broken any functionality.
+
+5. Code Coverage
+What happens: Code coverage analysis measures the percentage of code exercised by tests, helping identify untested parts of the codebase.
+
+How it works:
+
+Command: coverage run -m pytest tests/ and coverage report --fail-under=80
+Explanation: coverage.py runs pytest and measures which parts of the code are executed. After running, coverage report --fail-under=80 ensures that the coverage meets a minimum threshold (e.g., 80%). If coverage is below this level, the pipeline fails.
+An HTML report is generated (coverage html) to visualize which parts of the code were not covered, and this report is archived in Jenkins.
+Code coverage analysis ensures that critical paths are covered by tests, reducing the risk of bugs in untested areas.
+
+6. Package the Code
+What happens: After passing quality checks and tests, the application is packaged as a Python wheel file (.whl). This is a distributable binary format in Python, making it easier to deploy and install.
+
+How it works:
+
+Command: python setup.py bdist_wheel
+Explanation: This command uses Python’s setuptools to create a wheel package (stored in the dist/ directory). Jenkins then archives the wheel file (dist/*.whl), making it available as an artifact for later stages (e.g., deployment).
+The packaging step produces a versioned artifact ready for deployment to production or staging environments.
+
+7. Security Scanning
+What happens: A final security scan ensures that there are no vulnerabilities in the code or dependencies.
+
+How it works:
+
+Commands:
+Code Security: bandit -r src/ checks the code for security issues like unsafe function calls or input handling vulnerabilities.
+Dependency Security: safety check scans the installed dependencies to identify known vulnerabilities (using a vulnerability database).
+This step verifies that the code and libraries used are safe for deployment, addressing potential security risks.
+
+8. Push Artifacts to Repository
+What happens: The packaged artifacts are uploaded to an artifact repository like Nexus, Artifactory, or AWS CodeArtifact. This makes the artifacts available for other systems or stages in a deployment pipeline.
+
+How it works:
+
+Command:
+bash
+Copy code
+curl -u $NEXUS_USER:$NEXUS_PASSWORD -T dist/*.whl http://nexus.example.com/repository/pypi-repo/
+Explanation: This curl command uploads the wheel file to the configured artifact repository, using environment variables for authentication.
+Uploading to an artifact repository enables consistent versioning and retrieval of artifacts across different environments, simplifying deployment.
