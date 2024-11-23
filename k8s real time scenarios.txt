@@ -1,0 +1,93 @@
+in k8s cluster there will be 5pod in that one pod is not 
+running how will be get to know
+
+Use kubectl Commands to Inspect Pods
+A. Check Pod Status
+Run the following command to list all pods and check their statuses:
+
+bash
+Copy code
+kubectl get pods -o wide
+Look at the STATUS column to see the state of each pod (e.g., Running, Pending, CrashLoopBackOff, or Error).
+Example output:
+sql
+Copy code
+NAME          READY   STATUS             RESTARTS   AGE
+pod-1         1/1     Running            0          5m
+pod-2         0/1     CrashLoopBackOff   3          5m
+pod-3         1/1     Running            0          5m
+pod-4         1/1     Running            0          5m
+pod-5         1/1     Running            0          5m
+
+ Describe the Pod
+Use the describe command to get more details about the problematic pod:
+
+bash
+Copy code
+kubectl describe pod <pod-name>
+Check the Events section for error messages or reasons why the pod is not running.
+
+Check Pod Logs
+View the logs of the problematic pod to diagnose the issue:
+
+bash
+Copy code
+kubectl logs <pod-name>
+If the pod has multiple containers, specify the container:
+bash
+Copy code
+kubectl logs <pod-name> -c <container-name>
+
+Check Node Status
+Ensure the node hosting the pod is healthy:
+
+bash
+Copy code
+kubectl get nodes
+If the node is NotReady, investigate further:
+bash
+Copy code
+kubectl describe node <node-name>
+
+Possible Issues and Solutions
+A. Pod is in Pending
+Cause: Insufficient resources (CPU, memory) or scheduling constraints.
+Solution:
+Check resource requests and limits:
+bash
+Copy code
+kubectl describe pod <pod-name>
+Free up resources or scale the cluster.
+
+Pod is in CrashLoopBackOff
+Cause: Application inside the pod keeps crashing.
+Solution:
+Check the pod logs for the error:
+bash
+Copy code
+kubectl logs <pod-name>
+Verify the application configuration, environment variables, or dependencies.
+
+Pod is in Error
+Cause: Issues with the image, volume mounts, or configuration.
+Solution:
+Check the Events section of the pod description for error details.
+
+ Pod is in ImagePullBackOff
+Cause: Kubernetes cannot pull the container image.
+Solution:
+Check if the image name is correct and accessible:
+bash
+Copy code
+kubectl describe pod <pod-name>
+Verify credentials for private registries.
+
+Node Issues
+Cause: Node is NotReady or under resource pressure.
+Solution:
+Check node status and resource usage:
+bash
+Copy code
+kubectl describe node <node-name>
+Restart the kubelet on the node or investigate node-level issues.
+
