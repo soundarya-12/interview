@@ -1,0 +1,363 @@
+AWS
+
+Frontend: Angular hosted on Amazon S3 with CloudFront for global CDN.
+Backend: Node.js API running on Amazon ECS (Elastic Container Service).
+Database: Amazon RDS (MySQL) for relational data.
+Authentication: Amazon Cognito for user authentication.
+Monitoring: CloudWatch for logs and metrics.
+CI/CD: Pipeline built using CodePipeline, CodeBuild, and CodeDeploy.
+Load Balancing: Application Load Balancer (ALB) for the backend service.
+Domain Management: Route 53 for DNS routing.
+
+Step-by-Step Implementation
+1. Infrastructure Setup (IaC using Terraform)
+Provision the infrastructure using Terraform for consistency and repeatability.
+
+Example Terraform Configuration:
+
+hcl
+Copy code
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_s3_bucket" "frontend_bucket" {
+  bucket = "ecommerce-frontend-bucket"
+  acl    = "public-read"
+}
+
+resource "aws_rds_instance" "ecommerce_db" {
+  allocated_storage    = 20
+  engine               = "mysql"
+  engine_version       = "8.0"
+  instance_class       = "db.t3.micro"
+  name                 = "ecommerce"
+  username             = "admin"
+  password             = "password123"
+  publicly_accessible  = false
+}
+2. Application Development
+Frontend: Angular app built with REST API calls to the backend.
+Backend: Node.js API connected to the RDS database for product and order management.
+Dockerize the Backend:
+dockerfile
+Copy code
+FROM node:16
+WORKDIR /app
+COPY . .
+RUN npm install
+CMD ["node", "server.js"]
+
+CI/CD Pipeline with AWS CodePipeline
+Source: Use GitHub as the source repository.
+Build: Use AWS CodeBuild to build and test the application.
+Deploy:
+Frontend: Deploy to S3 and invalidate CloudFront cache.
+Backend: Deploy to ECS using CodeDeploy.
+CodePipeline Configuration (JSON):
+
+json
+Copy code
+{
+  "pipeline": {
+    "name": "EcommercePipeline",
+    "roleArn": "arn:aws:iam::123456789012:role/AWSCodePipelineServiceRole",
+    "artifactStore": {
+      "type": "S3",
+      "location": "codepipeline-artifacts"
+    },
+    "stages": [
+      {
+        "name": "Source",
+        "actions": [
+          {
+            "name": "GitHub_Source",
+            "actionTypeId": {
+              "category": "Source",
+              "owner": "ThirdParty",
+              "provider": "GitHub",
+              "version": "1"
+            },
+            "outputArtifacts": [{ "name": "SourceOutput" }],
+            "configuration": {
+              "Owner": "my-github-org",
+              "Repo": "ecommerce-app",
+              "Branch": "main",
+              "OAuthToken": "my-oauth-token"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Build",
+        "actions": [
+          {
+            "name": "Build",
+            "actionTypeId": {
+              "category": "Build",
+              "owner": "AWS",
+              "provider": "CodeBuild",
+              "version": "1"
+            },
+            "inputArtifacts": [{ "name": "SourceOutput" }],
+            "outputArtifacts": [{ "name": "BuildOutput" }],
+            "configuration": {
+              "ProjectName": "EcommerceBuild"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Deploy",
+        "actions": [
+          {
+            "name": "Deploy_Backend",
+            "actionTypeId": {
+              "category": "Deploy",
+              "owner": "AWS",
+              "provider": "CodeDeploy",
+              "version": "1"
+            },
+            "inputArtifacts": [{ "name": "BuildOutput" }],
+            "configuration": {
+              "ApplicationName": "EcommerceApp",
+              "DeploymentGroupName": "EcommerceBackend"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+
+ Deploy the Frontend to S3
+Angular Build:
+
+bash
+Copy code
+ng build --prod
+aws s3 sync ./dist/ecommerce-app s3://ecommerce-frontend-bucket
+Set CloudFront Distribution:
+
+Configure an origin pointing to the S3 bucket.
+Enable cache invalidation after deployment.
+5. Backend Deployment to ECS
+Create a Fargate Task Definition for the Node.js backend container.
+Configure an ECS Cluster and deploy using the task definition.
+Attach the ALB to route traffic to ECS services.
+
+Database Setup
+Use Amazon RDS for relational database requirements.
+Connect the backend to the RDS instance using environment variables.
+Node.js Configuration (example):
+
+javascript
+Copy code
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
+});
+7. Monitoring and Logging
+Enable CloudWatch Logs for ECS tasks to monitor backend logs.
+Set up Alarms for:
+High CPU or memory utilization.
+Unhealthy targets in the ALB.
+
+Expected Artifacts
+Deployed Frontend: Angular application accessible via CloudFront URL.
+Deployed Backend: API hosted on ECS accessible through ALB.
+Database Instance: RDS MySQL instance for data storage.
+Pipeline Logs: Build, test, and deployment logs in CodePipeline.
+Docker Image: Stored in Amazon ECR for backend services.
+CloudWatch Logs: Capturing backend logs and error reports.
+
+Common Errors in AWS Projects and How to Overcome Them
+Here’s a breakdown of common errors faced during AWS-based project development 
+and deployment, along with solutions:
+
+Access Denied Errors
+Error:
+Receiving Access Denied when trying to interact with services like S3, RDS, or other AWS resources.
+Cause:
+Insufficient permissions in the IAM policy attached to the user or role.
+Solution:
+Check IAM Policy:
+
+Ensure the IAM user/role has the necessary permissions for the operation.
+json
+Copy code
+{
+  "Effect": "Allow",
+  "Action": "s3:*",
+  "Resource": "arn:aws:s3:::my-bucket/*"
+}
+Attach Correct Policies:
+
+Use AWS managed policies or create custom policies with least privilege.
+Validate Role Assumptions:
+
+If using a role, 
+verify the entity can assume the role (e.g., AssumeRolePolicy).
+
+ EC2 Instance Termination
+Error:
+An EC2 instance is terminated unexpectedly or deleted.
+Cause:
+Auto-scaling configuration might be misconfigured.
+Instance termination protection is not enabled.
+Solution:
+Enable Termination Protection:
+
+Modify the instance settings:
+bash
+Copy code
+aws ec2 modify-instance-attribute --instance-id i-1234567890abcdef --no-disable-api-termination
+Inspect Auto-Scaling Policies:
+
+Review scaling triggers and adjust thresholds to prevent unnecessary terminations.
+Backup Data:
+
+Use EBS snapshots or AMIs to ensure data recovery if the instance is lost.
+
+Lambda Function Failing
+Error:
+Lambda function fails with timeout, permission, or missing dependency errors.
+Cause:
+Execution timeout exceeds the limit.
+Insufficient permissions for resources like S3, DynamoDB, etc.
+Missing dependencies in the Lambda package.
+Solution:
+Increase Timeout:
+Configure timeout in the Lambda settings.
+Update IAM Role:
+Ensure the Lambda execution role includes required permissions.
+Package Dependencies:
+Package and include dependencies locally or via Lambda layers.
+bash
+Copy code
+pip install -r requirements.txt -t .
+zip -r function.zip .
+
+RDS Connection Issues
+Error:
+Backend fails to connect to the RDS database.
+Cause:
+Security group configuration blocks access.
+Incorrect database credentials or endpoint.
+Solution:
+Verify Security Group:
+Allow inbound traffic on the correct port (e.g., 3306 for MySQL).
+Check Endpoint:
+Ensure the correct endpoint is being used in the application.
+Test Connectivity:
+Use telnet or nc to verify connectivity from the source environment.
+bash
+Copy code
+telnet mydb.us-east-1.rds.amazonaws.com 3306
+
+S3 Bucket Access Issues
+Error:
+Files cannot be uploaded or accessed from an S3 bucket.
+Cause:
+Misconfigured bucket policies.
+Lack of public access when required.
+Solution:
+Check Bucket Policy:
+Add appropriate policies for access:
+json
+Copy code
+{
+  "Effect": "Allow",
+  "Principal": "*",
+  "Action": "s3:GetObject",
+  "Resource": "arn:aws:s3:::my-bucket/*"
+}
+Enable Public Access (if needed):
+Adjust settings to allow public read for static websites.
+Use Signed URLs:
+Generate pre-signed URLs for controlled access.
+
+ECR Authentication Issues
+Error:
+Docker push or pull fails with authentication errors.
+Cause:
+The authentication token for ECR has expired or was not generated.
+Solution:
+Authenticate with AWS CLI:
+bash
+Copy code
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <ECR_REPO_URL>
+Use IAM Role on EC2:
+Attach an IAM role with ECR permissions to the EC2 instance.
+
+ ECS Service Not Scaling
+Error:
+ECS tasks are not scaling as expected under load.
+Cause:
+Auto-scaling policies are not configured or thresholds are incorrect.
+Solution:
+Check Scaling Policies:
+Ensure policies are defined for CPU or memory usage thresholds.
+json
+Copy code
+{
+  "ResourceId": "service/cluster-name/service-name",
+  "ScalableDimension": "ecs:service:DesiredCount",
+  "MinCapacity": 1,
+  "MaxCapacity": 10
+}
+Validate CloudWatch Alarms:
+Verify alarms triggering the scaling actions.
+
+Kubernetes Pod Issues
+Error:
+One or more pods in the Kubernetes cluster are not running.
+Cause:
+Insufficient resources, configuration errors, or failed health checks.
+Solution:
+Check Pod Status:
+bash
+Copy code
+kubectl get pods
+Inspect Logs:
+bash
+Copy code
+kubectl logs <pod-name>
+Describe Pod:
+Look for detailed error messages:
+bash
+Copy code
+kubectl describe pod <pod-name>
+Adjust Resource Limits:
+Update CPU and memory limits in the deployment manifest.
+
+Route 53 DNS Resolution Issues
+Error:
+Custom domain does not resolve to the application.
+Cause:
+Incorrect DNS records or propagation delays.
+Solution:
+Verify DNS Records:
+Ensure A, CNAME, or Alias records point to the correct resource (e.g., ALB).
+Test Resolution:
+bash
+Copy code
+nslookup example.com
+Wait for Propagation:
+DNS changes may take up to 24-48 hours to propagate.
+
+Cost Overruns
+Error:
+Unexpectedly high costs for AWS resources.
+Cause:
+Unused resources like idle EC2 instances or unoptimized storage.
+Solution:
+Set Budgets:
+Use AWS Budgets to monitor spending.
+Analyze Costs:
+Use AWS Cost Explorer for insights.
+Optimize Resources:
+Shut down unused EC2 instances and delete unused EBS volumes.
